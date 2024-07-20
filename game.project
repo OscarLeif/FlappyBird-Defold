@@ -5,12 +5,17 @@ main_collection = /main/main.collectionc
 shared_state = 1
 
 [display]
-width = 960
-height = 640
+width = 288
+height = 512
+dynamic_orientation = 1
+display_device_info = 1
 
 [android]
 input_method = HiddenInputField
+display_cutout = 0
+immersive_mode = 1
 
 [project]
-title = FlappyBirdDefold
+title = Flappy Bird Defold
+developer = Oscar Leif
 

@@ -1,0 +1,8 @@
+
+
+function init(self)
+	print("Main menu controller Init")
+	msg.post("@render:", "use_camera_projection")
+	msg.post("Camera#camera", "acquire_camera_focus")
+	print("menu controller End")
+end
