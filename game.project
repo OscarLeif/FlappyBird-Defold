@@ -19,3 +19,6 @@ immersive_mode = 1
 title = Flappy Bird Defold
 developer = Oscar Leif
 
+[input]
+game_binding = /input/game.input_bindingc
+

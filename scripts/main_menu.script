@@ -1,8 +1,138 @@
 
+local scroll_speed = 200.0 -- float
+local ground_width = 512 -- int (width of your ground image)
+
+local grounds = {} --table (like an array)
+local menu_camera -- Local variable for the camera component
 
 function init(self)
 	print("Main menu controller Init")
+	msg.post(".", "acquire_input_focus")	
+	menu_camera = "Camera#camera" -- get the camera component
 	msg.post("@render:", "use_camera_projection")
-	msg.post("Camera#camera", "acquire_camera_focus")
+	msg.post(menu_camera, "acquire_camera_focus")		
+	
+	if menu_camera and go.exists(menu_camera) then 
+		print("Camera Found")
+	else 
+		print("Error: Camera component not found!")
+	end	
+	grounds= 
+	{
+		go.get_id("ground"),
+		go.get_id("ground1"),
+		go.get_id("ground2"),
+		go.get_id("ground3")
+	}
 	print("menu controller End")
+end
+
+function adjust_camera_orthographic_zoom(fit_mode)
+	local current_ortho_zoom = camera.get_orthographic_zoom(menu_camera)
+	print("Current Ortho zoom: " .. current_ortho_zoom)
+	local w, h = window.get_size()
+	local screen_width = w
+	local screen_height = h
+
+	local background_width = 288
+	local background_height = 512
+
+	-- Calculate the zoom factors for width and height
+	local zoom_x = screen_width / background_width
+	local zoom_y = screen_height / background_height
+
+	local new_ortho_zoom = 1
+
+	if fit_mode == "horizontal" then
+		new_ortho_zoom = zoom_x
+	elseif fit_mode == "vertical" then
+		new_ortho_zoom = zoom_y
+	elseif fit_mode == "area" then
+		new_ortho_zoom = math.min(zoom_x, zoom_y)
+	else
+		print("Invalid fit_mode: " .. tostring(fit_mode))
+		return
+	end
+
+	go.set(menu_camera, "orthographic_zoom", new_ortho_zoom)
+	print("New Ortho zoom: " .. new_ortho_zoom)
+end
+
+--not tested 
+function adjust_camera_fov(camera, mode)
+	local w, h = window.get_size()
+	local screen_width = w
+	local screen_height = h
+
+	local aspect_ratio = screen_width / screen_height
+
+	local background_width = 288 -- Replace with your background width
+	local background_height = 512 -- Replace with your background height
+
+	-- Calculate FOV to match background size
+	local desired_aspect_ratio = background_width / background_height
+	local fov
+
+	if mode == "vertical" then
+		-- Match the vertical size of the texture
+		fov = math.deg(2 * math.atan((background_height / 2) / (screen_height / 2)))
+	elseif mode == "horizontal" then
+		-- Match the horizontal size of the texture
+		fov = math.deg(2 * math.atan((background_width / 2) / (screen_width / 2)))
+	elseif mode == "area" then
+		-- Match the area of the texture (more complex, depends on how you want to fit it)
+		if aspect_ratio > desired_aspect_ratio then
+			-- Wider than the background
+			fov = math.deg(2 * math.atan((background_width / 2) / (screen_width / 2)))
+		else
+			-- Taller than the background
+			fov = math.deg(2 * math.atan((background_height / 2) / (screen_height / 2)))
+		end
+	else
+		print("Error: Invalid camera mode specified!")
+		return
+	end
+
+	-- Set the camera's FOV
+	if camera and go.exists(camera) then
+		print("setup camera FOV " .. fov .. " for mode " .. mode)
+		--msg.post(camera, "set_projection", { fov = fov })
+		msg.post(camera, "set_projection", { ortho_size = fov })
+	else
+		print("Error: Camera component not found or invalid when setting FOV!")
+	end
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("+") and action.released then		
+		--local current_fov = camera.get_fov(menu_camera)
+		--camera.set_fov(menu_camera, current_fov + 0.01)
+		--print("FOV: " .. camera.get_fov(menu_camera))
+		local ortho_zoom = camera.get_orthographic_zoom(menu_camera) + 0.01
+		print("zoom apply: " .. ortho_zoom)
+		--camera.set_orthographic_zoom(menu_camera, ortho_zoom)--I think this doesnt work
+		go.set(menu_camera, "orthographic_zoom", ortho_zoom)
+	elseif action_id == hash("-") and action.released then
+		--local current_fov = camera.get_fov(menu_camera)
+		--camera.set_fov(menu_camera, current_fov - 0.01)
+		--print("FOV: " .. camera.get_fov(menu_camera))
+		local ortho_zoom = camera.get_orthographic_zoom(menu_camera) - 0.01
+		print("zoom apply: " .. ortho_zoom)
+		--camera.set_orthographic_zoom(menu_camera, ortho_zoom)--I think this doesnt work
+		go.set(menu_camera, "orthographic_zoom", ortho_zoom)
+	end
+end
+
+function update(self, dt)
+	for i, ground in ipairs(grounds) do
+		local pos = go.get_position(ground)
+		pos.x = pos.x - scroll_speed * dt
+
+		if pos.x <= -ground_width then
+			pos.x = pos.x + ground_width * #grounds
+		end
+		go.set_position(pos, ground)
+	end
+	adjust_camera_orthographic_zoom("area")
+	--adjust_camera_fov(camera, "vertical")
 end
