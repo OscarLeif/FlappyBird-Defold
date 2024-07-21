@@ -1,9 +1,18 @@
 
 local scroll_speed = 200.0 -- float
-local ground_width = 512 -- int (width of your ground image)
+local ground_width = 336 -- int (width of your ground image)
 
 local grounds = {} --table (like an array)
 local menu_camera -- Local variable for the camera component
+local screen_points = {}
+local world_points = {}
+
+local DISPLAY_WIDTH = sys.get_config_int("display.width")
+local DISPLAY_HEIGHT = sys.get_config_int("display.height")
+
+local screen_width = 0.0
+local screen_height = 0.0
+
 
 function init(self)
 	print("Main menu controller Init")
@@ -24,12 +33,47 @@ function init(self)
 		go.get_id("ground2"),
 		go.get_id("ground3")
 	}
+	--setup the screen to world points
+	local w, h = window.get_size()
+	local screen_width = w
+	local screen_height = h
+
+	-- Define the screen points for the corners
+	screen_points = {
+		top_left = vmath.vector3(0, 0, 0),
+		top_right = vmath.vector3(screen_width, 0, 0),
+		bottom_left = vmath.vector3(0, screen_height, 0),
+		bottom_right = vmath.vector3(screen_width, screen_height, 0)
+	}
+	
 	print("menu controller End")
+end
+
+--camera helper
+local function screen_to_world(x, y, z, camera)
+	local projection = go.get(menu_camera, "projection")
+	local view = go.get(menu_camera, "view")
+	local w, h = window.get_size()
+	-- The window.get_size() function will return the scaled window size,
+	-- ie taking into account display scaling (Retina screens on macOS for
+	-- instance). We need to adjust for display scaling in our calculation.
+	w = w / (w / DISPLAY_WIDTH)
+	h = h / (h / DISPLAY_HEIGHT)
+
+	-- https://defold.com/manuals/camera/#converting-mouse-to-world-coordinates
+	local inv = vmath.inv(projection * view)
+	x = (2 * x / w) - 1
+	y = (2 * y / h) - 1
+	z = (2 * z) - 1
+	local x1 = x * inv.m00 + y * inv.m01 + z * inv.m02 + inv.m03
+	local y1 = x * inv.m10 + y * inv.m11 + z * inv.m12 + inv.m13
+	local z1 = x * inv.m20 + y * inv.m21 + z * inv.m22 + inv.m23
+	return x1, y1, z1
 end
 
 function adjust_camera_orthographic_zoom(fit_mode)
 	local current_ortho_zoom = camera.get_orthographic_zoom(menu_camera)
-	print("Current Ortho zoom: " .. current_ortho_zoom)
+	--print("Current Ortho zoom: " .. current_ortho_zoom)
 	local w, h = window.get_size()
 	local screen_width = w
 	local screen_height = h
@@ -55,14 +99,15 @@ function adjust_camera_orthographic_zoom(fit_mode)
 	end
 
 	go.set(menu_camera, "orthographic_zoom", new_ortho_zoom)
-	print("New Ortho zoom: " .. new_ortho_zoom)
+	--print("New Ortho zoom: " .. new_ortho_zoom)
 end
 
 --not tested 
 function adjust_camera_fov(camera, mode)
 	local w, h = window.get_size()
-	local screen_width = w
-	local screen_height = h
+	screen_width = w
+	screen_height = h
+	
 
 	local aspect_ratio = screen_width / screen_height
 
@@ -104,6 +149,15 @@ function adjust_camera_fov(camera, mode)
 end
 
 function on_input(self, action_id, action)
+	
+	if action_id == hash("touch") and action.pressed then
+		-- convert mouse/touch screen position to world position
+		print("screen X:" .. action.x .. " Y:"..action.y)
+		local worldx, worldy = screen_to_world(action.x, action.y, 0, "#camera")
+		local world = vmath.vector3(worldx, worldy, 0)
+		--go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, world, go.EASING_LINEAR, 0.5, 0, moved_to_position) -- <8>
+	end
+	
 	if action_id == hash("+") and action.released then		
 		--local current_fov = camera.get_fov(menu_camera)
 		--camera.set_fov(menu_camera, current_fov + 0.01)
@@ -123,16 +177,44 @@ function on_input(self, action_id, action)
 	end
 end
 
+
+function get_camera_corner_points()
+	-- Convert screen points to world points and store in self
+	--weird it returns x,y,z
+	----local worldx, worldy = screen_to_world(action.x, action.y, 0, "#camera")
+	local topLeftx, topLefty = screen_to_world(0, screen_height, 0, menu_camera)
+	local topRightx,topRighty = screen_to_world(screen_width, screen_height, 0, menu_camera)
+	local bottomLeftx,bottomLefty = screen_to_world(0, 0, 0, menu_camera)
+	local bottomRightx,bottomRighty = screen_to_world(screen_width, 0, 0, menu_camera)
+	
+	world_points = {
+		top_left = vmath.vector3(topLeftx,topLefty,0),
+		top_right = vmath.vector3(topRightx, topRighty,0),
+		bottom_left = vmath.vector3(bottomLeftx,bottomLefty,0),
+		bottom_right = vmath.vector3(bottomRightx, bottomRighty,0),
+	}
+
+	-- Print the world points for verification
+	print("Top Left: ", world_points.top_left)
+	print("Top Right: ", world_points.top_right)
+	print("Bottom Left: ", world_points.bottom_left)
+	print("Bottom Right: ", world_points.bottom_right)
+end
+--
 function update(self, dt)
+	adjust_camera_orthographic_zoom("area")
+	get_camera_corner_points()
 	for i, ground in ipairs(grounds) do
 		local pos = go.get_position(ground)
 		pos.x = pos.x - scroll_speed * dt
-
-		if pos.x <= -ground_width then
+		local x_screen = world_points.bottom_left.x
+		if pos.x <= x_screen -ground_width then
 			pos.x = pos.x + ground_width * #grounds
 		end
 		go.set_position(pos, ground)
 	end
-	adjust_camera_orthographic_zoom("area")
+	
 	--adjust_camera_fov(camera, "vertical")
 end
+
+
