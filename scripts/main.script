@@ -1,0 +1,17 @@
+function init(self)
+	print("main.script file init")
+	msg.post(".", "main_menu_scene") --send message, the function bellow recieves the message
+end
+
+function on_message(self, message_id, message, sender)	
+	if message_id == hash("main_menu_scene")then 
+		--load main menu
+		msg.post("#main_menu_proxy", "load")--ok this should load but nothig happens
+		print("Trying to load main menu")
+	elseif message_id == hash("proxy_loaded") then
+		if sender == msg.url("#main_menu_proxy") then
+			msg.post(sender, "enable")--we cannot recieve inputs ?
+			msg.post(sender, "acquire_input_focus")-- from here we should set the input focus?		
+		end
+	end
+end

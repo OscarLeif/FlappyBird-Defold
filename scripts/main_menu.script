@@ -195,10 +195,10 @@ function get_camera_corner_points()
 	}
 
 	-- Print the world points for verification
-	print("Top Left: ", world_points.top_left)
-	print("Top Right: ", world_points.top_right)
-	print("Bottom Left: ", world_points.bottom_left)
-	print("Bottom Right: ", world_points.bottom_right)
+	--print("Top Left: ", world_points.top_left)
+	--print("Top Right: ", world_points.top_right)
+	--print("Bottom Left: ", world_points.bottom_left)
+	--print("Bottom Right: ", world_points.bottom_right)
 end
 --
 function update(self, dt)
