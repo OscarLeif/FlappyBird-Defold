@@ -22,6 +22,10 @@ images {
   image: "/Images/pipe-green.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
+images {
+  image: "/Images/defold.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
 animations {
   id: "blue-bird"
   images {
