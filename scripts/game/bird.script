@@ -65,8 +65,20 @@ function on_message(self, message_id, message, sender)
 	end
 		
 	if player_state == BIRD_STATE.alive then
+		--input from game.script on_input
 		if message_id == hash("click") then
 			click(self)
+		end
+
+		--Physics Collision
+		if(message_id == hashes.PHYSICS_MESSAGE_COLLISION and message.group ~= hashes.SCORE) then
+			print("The bird have a collision")
+			if (message.group == hashes.DIRT)then
+				self.acceleration=0
+				self.velocity.y=0
+			end
+		elseif (message_id == hashes.PHYSICS_MESSAGE_TRIGGER)then
+			print("Bird:Trigger")
 		end
 	end
 end

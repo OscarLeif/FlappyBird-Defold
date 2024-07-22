@@ -22,10 +22,28 @@ local screen_width
 local screen_height
 local world_points = {}
 
+--Icons to test the screen to world. Must be at the screen corners
 local icon_top_left
 local icon_top_right
 local icon_bottom_left
 local icon_bottom_right
+
+local base_ground_go
+local ground_factory --factory of gameobjects
+local grounds = {} -- List to store ground segments
+local grounds_scroll
+local ground_width
+local num_ground = 6
+
+function InitGrounds()
+		ground_width = go.get("ground#sprite", "size.x")
+		local base_pos = go.get_position("ground")
+		for i = 1, num_ground do
+			local ground_pos = vmath.vector3(base_pos.x + (i - 1) * ground_width, base_pos.y, base_pos.z)
+			local ground = factory.create(ground_factory, ground_pos)
+			table.insert(grounds, ground)
+		end
+end
 
 function init(self)
 	icon_top_left = "icon_top_left"
@@ -40,7 +58,9 @@ function init(self)
 	camera_go = "camera"
 	player_go = "player"
 	player = "player#bird"
+	ground_factory = "ground_scroller#factory"
 	pipe_factory = "pipe_factory#collection_factory"
+	base_ground_go = "ground_scroller/ground"--Ground game object
 	self.spawnPos = vmath.vector3()
 
 	if game_camera and go.exists(game_camera) then
@@ -50,7 +70,9 @@ function init(self)
 	else
 		print("Error: Camera component not found!")
 	end
+	InitGrounds()
 end
+
 
 local function camera_follow()
 	local camera_pos = go.get_world_position(camera_go)
@@ -201,9 +223,30 @@ function on_message(self, message_id, message, sender)
 	end
 end
 
+local function update_grounds()
+    for _, ground in ipairs(grounds) do
+        local ground_pos = go.get_position(ground)
+        --if ground_pos.x + ground_width < go.get_position(camera_go).x - 50 then
+		if ground_pos.x + ground_width < world_points.bottom_left.x - 50 then
+            -- Reposition the ground segment to the right of the last ground segment
+            local last_ground = grounds[#grounds]
+            local last_ground_pos = go.get_position(last_ground)
+            ground_pos.x = last_ground_pos.x + ground_width
+            go.set_position(ground_pos, ground)
+            
+            -- Move the repositioned ground segment to the end of the list
+            table.remove(grounds, 1)
+            table.insert(grounds, ground)
+        end
+    end
+end
+
 function update(self, dt)
+	
 	get_camera_corner_points(game_camera)
 	adjust_camera_orthographic_zoom("area", game_camera)
+	update_grounds()
+
 	if state == STATES.ready then
 		--print("The game is waiting..")
 		next_spawn_x = go.get_world_position().x + PIPE_SPAWN_INTERVAL

@@ -3,21 +3,34 @@ embedded_components {
   type: "sprite"
   data: "default_animation: \"base\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
-  "blend_mode: BLEND_MODE_ALPHA\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
   "  texture: \"/Images/assets.atlas\"\n"
   "}\n"
   ""
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
+}
+embedded_components {
+  id: "collisionobject"
+  type: "collisionobject"
+  data: "type: COLLISION_OBJECT_TYPE_KINEMATIC\n"
+  "mass: 0.0\n"
+  "friction: 0.1\n"
+  "restitution: 0.5\n"
+  "group: \"dirt\"\n"
+  "mask: \"bird\"\n"
+  "embedded_collision_shape {\n"
+  "  shapes {\n"
+  "    shape_type: TYPE_BOX\n"
+  "    position {\n"
+  "    }\n"
+  "    rotation {\n"
+  "    }\n"
+  "    index: 0\n"
+  "    count: 3\n"
+  "  }\n"
+  "  data: 168.0\n"
+  "  data: 56.0\n"
+  "  data: 10.0\n"
+  "}\n"
+  ""
 }

@@ -13,37 +13,8 @@ embedded_instances {
   data: "components {\n"
   "  id: \"game\"\n"
   "  component: \"/scripts/game.script\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
-  "  property_decls {\n"
-  "  }\n"
   "}\n"
   ""
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
 }
 embedded_instances {
   id: "camera"
@@ -57,149 +28,70 @@ embedded_instances {
   "far_z: 1000.0\\n"
   "auto_aspect_ratio: 1\\n"
   "orthographic_projection: 1\\n"
-  "orthographic_zoom: 1.0\\n"
   "\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
   "}\n"
   ""
   position {
-    x: 0.0
     y: 249.0
     z: 417.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
   }
 }
 embedded_instances {
   id: "ground_scroller"
   children: "ground"
-  data: ""
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
+  data: "embedded_components {\n"
+  "  id: \"factory\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/prefabs/ground.go\\\"\\n"
+  "load_dynamically: true\\n"
+  "\"\n"
+  "}\n"
+  ""
 }
 embedded_instances {
   id: "ground"
   data: "embedded_components {\n"
   "  id: \"collisionobject\"\n"
   "  type: \"collisionobject\"\n"
-  "  data: \"collision_shape: \\\"\\\"\\n"
-  "type: COLLISION_OBJECT_TYPE_KINEMATIC\\n"
+  "  data: \"type: COLLISION_OBJECT_TYPE_KINEMATIC\\n"
   "mass: 0.0\\n"
   "friction: 0.1\\n"
   "restitution: 0.5\\n"
-  "group: \\\"default\\\"\\n"
-  "mask: \\\"default\\\"\\n"
+  "group: \\\"dirt\\\"\\n"
+  "mask: \\\"dirt\\\"\\n"
   "embedded_collision_shape {\\n"
   "  shapes {\\n"
   "    shape_type: TYPE_BOX\\n"
   "    position {\\n"
-  "      x: 0.0\\n"
-  "      y: 0.0\\n"
-  "      z: 0.0\\n"
   "    }\\n"
   "    rotation {\\n"
-  "      x: 0.0\\n"
-  "      y: 0.0\\n"
-  "      z: 0.0\\n"
-  "      w: 1.0\\n"
   "    }\\n"
   "    index: 0\\n"
   "    count: 3\\n"
-  "    id: \\\"\\\"\\n"
   "  }\\n"
-  "  data: 168.0\\n"
-  "  data: 56.0\\n"
+  "  data: 10.0\\n"
+  "  data: 10.0\\n"
   "  data: 10.0\\n"
   "}\\n"
-  "linear_damping: 0.0\\n"
-  "angular_damping: 0.0\\n"
-  "locked_rotation: false\\n"
-  "bullet: false\\n"
   "\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
   "}\n"
   "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
   "  data: \"default_animation: \\\"base\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "blend_mode: BLEND_MODE_ALPHA\\n"
   "textures {\\n"
   "  sampler: \\\"texture_sampler\\\"\\n"
   "  texture: \\\"/Images/assets.atlas\\\"\\n"
   "}\\n"
   "\"\n"
   "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
   "    z: 1.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
   "  }\n"
   "}\n"
   ""
   position {
-    x: 0.0
     y: 57.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
   }
 }
 embedded_instances {
@@ -207,108 +99,51 @@ embedded_instances {
   data: "components {\n"
   "  id: \"bird\"\n"
   "  component: \"/scripts/game/bird.script\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
-  "  property_decls {\n"
-  "  }\n"
   "}\n"
   "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
   "  data: \"default_animation: \\\"blue-bird\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "blend_mode: BLEND_MODE_ALPHA\\n"
   "textures {\\n"
   "  sampler: \\\"texture_sampler\\\"\\n"
   "  texture: \\\"/Images/assets.atlas\\\"\\n"
   "}\\n"
   "\"\n"
   "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
   "    z: 2.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
   "  }\n"
   "}\n"
   "embedded_components {\n"
   "  id: \"collisionobject\"\n"
   "  type: \"collisionobject\"\n"
-  "  data: \"collision_shape: \\\"\\\"\\n"
-  "type: COLLISION_OBJECT_TYPE_KINEMATIC\\n"
+  "  data: \"type: COLLISION_OBJECT_TYPE_KINEMATIC\\n"
   "mass: 0.0\\n"
   "friction: 0.1\\n"
   "restitution: 0.5\\n"
-  "group: \\\"default\\\"\\n"
-  "mask: \\\"default\\\"\\n"
+  "group: \\\"bird\\\"\\n"
+  "mask: \\\"geometry\\\"\\n"
+  "mask: \\\"dirt\\\"\\n"
+  "mask: \\\"score\\\"\\n"
   "embedded_collision_shape {\\n"
   "  shapes {\\n"
   "    shape_type: TYPE_BOX\\n"
   "    position {\\n"
-  "      x: 0.0\\n"
-  "      y: 0.0\\n"
-  "      z: 0.0\\n"
   "    }\\n"
   "    rotation {\\n"
-  "      x: 0.0\\n"
-  "      y: 0.0\\n"
-  "      z: 0.0\\n"
-  "      w: 1.0\\n"
   "    }\\n"
   "    index: 0\\n"
   "    count: 3\\n"
-  "    id: \\\"\\\"\\n"
   "  }\\n"
   "  data: 15.0\\n"
   "  data: 10.0\\n"
   "  data: 10.0\\n"
   "}\\n"
-  "linear_damping: 0.0\\n"
-  "angular_damping: 0.0\\n"
-  "locked_rotation: false\\n"
-  "bullet: false\\n"
   "\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
   "}\n"
   ""
   position {
-    x: 0.0
     y: 239.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
   }
 }
 embedded_instances {
@@ -318,22 +153,13 @@ embedded_instances {
   "  type: \"sprite\"\n"
   "  data: \"default_animation: \\\"background-day\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "blend_mode: BLEND_MODE_ALPHA\\n"
   "textures {\\n"
   "  sampler: \\\"texture_sampler\\\"\\n"
   "  texture: \\\"/Images/assets.atlas\\\"\\n"
   "}\\n"
   "\"\n"
   "  position {\n"
-  "    x: 0.0\n"
   "    y: 258.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
   "  }\n"
   "}\n"
   "embedded_components {\n"
@@ -341,7 +167,6 @@ embedded_instances {
   "  type: \"sprite\"\n"
   "  data: \"default_animation: \\\"background-day\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "blend_mode: BLEND_MODE_ALPHA\\n"
   "textures {\\n"
   "  sampler: \\\"texture_sampler\\\"\\n"
   "  texture: \\\"/Images/assets.atlas\\\"\\n"
@@ -350,13 +175,6 @@ embedded_instances {
   "  position {\n"
   "    x: 288.0\n"
   "    y: 258.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
   "  }\n"
   "}\n"
   "embedded_components {\n"
@@ -364,7 +182,6 @@ embedded_instances {
   "  type: \"sprite\"\n"
   "  data: \"default_animation: \\\"background-day\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "blend_mode: BLEND_MODE_ALPHA\\n"
   "textures {\\n"
   "  sampler: \\\"texture_sampler\\\"\\n"
   "  texture: \\\"/Images/assets.atlas\\\"\\n"
@@ -373,13 +190,6 @@ embedded_instances {
   "  position {\n"
   "    x: -288.0\n"
   "    y: 258.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
   "  }\n"
   "}\n"
   "embedded_components {\n"
@@ -387,7 +197,6 @@ embedded_instances {
   "  type: \"sprite\"\n"
   "  data: \"default_animation: \\\"background-day\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "blend_mode: BLEND_MODE_ALPHA\\n"
   "textures {\\n"
   "  sampler: \\\"texture_sampler\\\"\\n"
   "  texture: \\\"/Images/assets.atlas\\\"\\n"
@@ -396,13 +205,6 @@ embedded_instances {
   "  position {\n"
   "    x: -576.0\n"
   "    y: 258.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
   "  }\n"
   "}\n"
   "embedded_components {\n"
@@ -410,7 +212,6 @@ embedded_instances {
   "  type: \"sprite\"\n"
   "  data: \"default_animation: \\\"background-day\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "blend_mode: BLEND_MODE_ALPHA\\n"
   "textures {\\n"
   "  sampler: \\\"texture_sampler\\\"\\n"
   "  texture: \\\"/Images/assets.atlas\\\"\\n"
@@ -419,31 +220,12 @@ embedded_instances {
   "  position {\n"
   "    x: 576.0\n"
   "    y: 258.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
   "  }\n"
   "}\n"
   ""
   position {
-    x: 0.0
     y: -250.0
     z: -461.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
   }
 }
 embedded_instances {
@@ -452,38 +234,9 @@ embedded_instances {
   "  id: \"collection_factory\"\n"
   "  type: \"collectionfactory\"\n"
   "  data: \"prototype: \\\"/prefabs/pipe.collection\\\"\\n"
-  "load_dynamically: false\\n"
-  "dynamic_prototype: false\\n"
   "\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
   "}\n"
   ""
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
 }
 embedded_instances {
   id: "icon_top_left"
@@ -492,22 +245,13 @@ embedded_instances {
   "  type: \"sprite\"\n"
   "  data: \"default_animation: \\\"defold\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "blend_mode: BLEND_MODE_ALPHA\\n"
   "textures {\\n"
   "  sampler: \\\"texture_sampler\\\"\\n"
   "  texture: \\\"/Images/assets.atlas\\\"\\n"
   "}\\n"
   "\"\n"
   "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
   "    z: 5.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
   "  }\n"
   "  scale {\n"
   "    x: 0.15\n"
@@ -516,22 +260,6 @@ embedded_instances {
   "  }\n"
   "}\n"
   ""
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
 }
 embedded_instances {
   id: "icon_top_right"
@@ -540,22 +268,13 @@ embedded_instances {
   "  type: \"sprite\"\n"
   "  data: \"default_animation: \\\"defold\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "blend_mode: BLEND_MODE_ALPHA\\n"
   "textures {\\n"
   "  sampler: \\\"texture_sampler\\\"\\n"
   "  texture: \\\"/Images/assets.atlas\\\"\\n"
   "}\\n"
   "\"\n"
   "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
   "    z: 5.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
   "  }\n"
   "  scale {\n"
   "    x: 0.15\n"
@@ -564,22 +283,6 @@ embedded_instances {
   "  }\n"
   "}\n"
   ""
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
 }
 embedded_instances {
   id: "icon_bottom_left"
@@ -588,22 +291,13 @@ embedded_instances {
   "  type: \"sprite\"\n"
   "  data: \"default_animation: \\\"defold\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "blend_mode: BLEND_MODE_ALPHA\\n"
   "textures {\\n"
   "  sampler: \\\"texture_sampler\\\"\\n"
   "  texture: \\\"/Images/assets.atlas\\\"\\n"
   "}\\n"
   "\"\n"
   "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
   "    z: 5.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
   "  }\n"
   "  scale {\n"
   "    x: 0.15\n"
@@ -612,22 +306,6 @@ embedded_instances {
   "  }\n"
   "}\n"
   ""
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
 }
 embedded_instances {
   id: "icon_bottom_right"
@@ -636,22 +314,13 @@ embedded_instances {
   "  type: \"sprite\"\n"
   "  data: \"default_animation: \\\"defold\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "blend_mode: BLEND_MODE_ALPHA\\n"
   "textures {\\n"
   "  sampler: \\\"texture_sampler\\\"\\n"
   "  texture: \\\"/Images/assets.atlas\\\"\\n"
   "}\\n"
   "\"\n"
   "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
   "    z: 5.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
   "  }\n"
   "  scale {\n"
   "    x: 0.15\n"
@@ -660,20 +329,4 @@ embedded_instances {
   "  }\n"
   "}\n"
   ""
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-  }
 }
