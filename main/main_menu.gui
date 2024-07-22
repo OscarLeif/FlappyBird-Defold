@@ -12,7 +12,7 @@ background_color {
 nodes {
   position {
     x: 150.0
-    y: 407.0
+    y: 322.0
     z: 0.0
     w: 1.0
   }
@@ -258,7 +258,7 @@ layouts {
   nodes {
     position {
       x: 358.0
-      y: 1073.0
+      y: 816.0
       z: 0.0
       w: 1.0
     }
@@ -269,9 +269,9 @@ layouts {
       w: 1.0
     }
     scale {
-      x: 1.0
-      y: 1.0
-      z: 1.0
+      x: 1.28
+      y: 1.28
+      z: 1.28
       w: 1.0
     }
     size {
@@ -307,6 +307,7 @@ layouts {
     clipping_inverted: false
     alpha: 1.0
     overridden_fields: 1
+    overridden_fields: 3
     overridden_fields: 4
     template_node_child: false
     size_mode: SIZE_MODE_MANUAL

@@ -1,0 +1,147 @@
+--[[file: game.script
+	Game have 3 states idle, play, gameover
+--]]
+local hashes = require("utils.hashes") --see the file Utils/hashes.script
+local STATES = {ready=0,game=1, game_over=2}
+
+local state -- Like enum state
+local game_camera -- Local variable for the camera component
+local camera_go
+local player_go --player go reference
+local player_component --player component script
+
+local pipe_factory
+local pipes = {}
+local PIPE_SPAWN_INTERVAL = 160 -- Distance interval to spawn new pipes
+local next_spawn_x -- Next x-coordinate to spawn a pipe
+
+--Camera variables
+local DISPLAY_WIDTH = sys.get_config_int("display.width")
+local DISPLAY_HEIGHT = sys.get_config_int("display.height")
+local screen_width
+local screen_height
+local world_points = {}
+
+function init(self)	
+	print("Game controller init")
+	msg.post(".", hashes.INPUT_FOCUS_GET)
+	state = STATES.ready
+	game_camera = "camera#camera" -- get the camera component
+	camera_go = "camera"
+	player_go = "player"
+	player = "player#bird"
+	pipe_factory = "pipe_factory#collection_factory"
+	self.spawnPos = vmath.vector3()
+	
+	if game_camera and go.exists(game_camera) then 
+		print("Camera Found. Change Render")
+		msg.post("@render:", "use_camera_projection")
+		msg.post(game_camera, "acquire_camera_focus")		
+	else 
+		print("Error: Camera component not found!")
+	end		
+end
+
+local function camera_follow()
+	local camera_pos = go.get_world_position(camera_go)
+	local player_pos = go.get_world_position(player_go)
+
+	camera_pos.x = player_pos.x + 50
+	go.set_position(camera_pos, camera_go)
+end
+
+function on_input(self, action_id, action)
+	if action_id == hashes.INPUT_TOUCH and action.pressed then
+		if state == STATES.ready then 
+			state = STATES.playing
+			msg.post(player, "set_player_state", { state = 1 }) -- Assuming 1 is the alive state			
+		else if state == STATES.playing then
+			msg.post(player, "click")
+			local player_pos = go.get_position(player_go)
+			if player_pos.x > self.spawnPos.x then
+				self.spawnPos.x = self.spawnPos.x + 20
+				print("spawn here")
+			end
+		end
+		end
+		print("Game Manager click")
+	end
+end
+
+local function spawn_pipe()
+	local player_pos = go.get_world_position(player_go)
+
+	--print ("top right " .. world_points.top_right .. "bottom right " .. world_points.bottom_right)
+	local spawn_pos = (world_points.top_right+world_points.bottom_right)/2
+	spawn_pos.x = spawn_pos.x + 52 -- + the pipe width
+	--local spawn_pos = vmath.vector3(next_spawn_x, player_pos.y, 0)
+	local pipe = collectionfactory.create(pipe_factory, spawn_pos)
+	table.insert(pipes, pipe)
+	next_spawn_x = next_spawn_x + PIPE_SPAWN_INTERVAL
+	--the spawn interval is fine
+	--basically the spawn position is always a little right of the screen area.
+	-- 
+end
+
+--camera helper
+local function screen_to_world(x, y, z, camera)
+	local projection = go.get(camera, "projection")
+	local view = go.get(camera, "view")
+	local w, h = window.get_size()
+	-- The window.get_size() function will return the scaled window size,
+	-- ie taking into account display scaling (Retina screens on macOS for
+	-- instance). We need to adjust for display scaling in our calculation.
+	w = w / (w / DISPLAY_WIDTH)
+	h = h / (h / DISPLAY_HEIGHT)
+
+	-- https://defold.com/manuals/camera/#converting-mouse-to-world-coordinates
+	local inv = vmath.inv(projection * view)
+	x = (2 * x / w) - 1
+	y = (2 * y / h) - 1
+	z = (2 * z) - 1
+	local x1 = x * inv.m00 + y * inv.m01 + z * inv.m02 + inv.m03
+	local y1 = x * inv.m10 + y * inv.m11 + z * inv.m12 + inv.m13
+	local z1 = x * inv.m20 + y * inv.m21 + z * inv.m22 + inv.m23
+	return x1, y1, z1
+end
+
+local function get_camera_corner_points(camera)
+	-- Convert screen points to world points and store in self
+	--weird it returns x,y,z
+	----local worldx, worldy = screen_to_world(action.x, action.y, 0, "#camera")
+	local w, h = window.get_size()
+	screen_width = w
+	screen_height = h
+	
+	local topLeftx, topLefty = screen_to_world(0, screen_height, 0, camera)
+	local topRightx,topRighty = screen_to_world(screen_width, screen_height, 0, camera)
+	local bottomLeftx,bottomLefty = screen_to_world(0, 0, 0, camera)
+	local bottomRightx,bottomRighty = screen_to_world(screen_width, 0, 0, camera)
+
+	world_points = {
+		top_left = vmath.vector3(topLeftx,topLefty,0),
+		top_right = vmath.vector3(topRightx, topRighty,0),
+		bottom_left = vmath.vector3(bottomLeftx,bottomLefty,0),
+		bottom_right = vmath.vector3(bottomRightx, bottomRighty,0),
+	}
+
+	-- Print the world points for verification
+	--print("Top Left: ", world_points.top_left)
+	--print("Top Right: ", world_points.top_right)
+	--print("Bottom Left: ", world_points.bottom_left)
+	--print("Bottom Right: ", world_points.bottom_right)
+end
+
+function update(self, dt)
+	get_camera_corner_points(game_camera)
+	if state == STATES.ready then
+		--print("The game is waiting..")
+		next_spawn_x = go.get_world_position().x + PIPE_SPAWN_INTERVAL
+	elseif state == STATES.playing then
+		local player_pos = go.get_world_position(player_go)
+		if player_pos.x >= next_spawn_x then			
+			spawn_pipe()
+		end
+	end
+	camera_follow()
+end

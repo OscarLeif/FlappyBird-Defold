@@ -1,5 +1,5 @@
 
-local scroll_speed = 200.0 -- float
+local scroll_speed = 100.0 -- float
 local ground_width = 336 -- int (width of your ground image)
 
 local grounds = {} --table (like an array)
@@ -13,13 +13,24 @@ local DISPLAY_HEIGHT = sys.get_config_int("display.height")
 local screen_width = 0.0
 local screen_height = 0.0
 
+local bird
+
 
 function init(self)
 	print("Main menu controller Init")
 	msg.post(".", "acquire_input_focus")	
 	menu_camera = "Camera#camera" -- get the camera component
 	msg.post("@render:", "use_camera_projection")
-	msg.post(menu_camera, "acquire_camera_focus")		
+	msg.post(menu_camera, "acquire_camera_focus")
+	bird = "bird" 
+	if bird and go.exists(bird) then
+		print("Bird was found")
+		local to = go.get(bird, "position")
+		to.y = to.y + 20
+		go.animate(bird, "position", go.PLAYBACK_LOOP_PINGPONG, to, go.EASING_INOUTSINE, 2)
+	else 
+		print("bird not found")
+	end
 	
 	if menu_camera and go.exists(menu_camera) then 
 		print("Camera Found")
@@ -51,8 +62,8 @@ end
 
 --camera helper
 local function screen_to_world(x, y, z, camera)
-	local projection = go.get(menu_camera, "projection")
-	local view = go.get(menu_camera, "view")
+	local projection = go.get(camera, "projection")
+	local view = go.get(camera, "view")
 	local w, h = window.get_size()
 	-- The window.get_size() function will return the scaled window size,
 	-- ie taking into account display scaling (Retina screens on macOS for
@@ -71,7 +82,7 @@ local function screen_to_world(x, y, z, camera)
 	return x1, y1, z1
 end
 
-function adjust_camera_orthographic_zoom(fit_mode)
+local function adjust_camera_orthographic_zoom(fit_mode)
 	local current_ortho_zoom = camera.get_orthographic_zoom(menu_camera)
 	--print("Current Ortho zoom: " .. current_ortho_zoom)
 	local w, h = window.get_size()
@@ -213,7 +224,6 @@ function update(self, dt)
 		end
 		go.set_position(pos, ground)
 	end
-	
 	--adjust_camera_fov(camera, "vertical")
 end
 

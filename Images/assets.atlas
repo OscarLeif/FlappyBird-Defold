@@ -18,6 +18,10 @@ images {
   image: "/Images/start_btn.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
+images {
+  image: "/Images/pipe-green.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
 animations {
   id: "blue-bird"
   images {

@@ -26,3 +26,6 @@ game_binding = /input/game.input_bindingc
 default_texture_min_filter = nearest
 default_texture_mag_filter = nearest
 
+[physics]
+scale = 0.2
+

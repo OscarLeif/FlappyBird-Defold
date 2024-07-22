@@ -1,0 +1,72 @@
+
+local BIRD_STATE = {idle=0, alive=1, dead = 2}
+local ACCELERATION = vmath.vector3(0,-460,0)
+local IDLE_SPEED = 50
+local OSCILLATION_AMPLITUDE = 0.5
+local OSCILLATION_FREQUENCY = 4
+local ROTATION_EASING = vmath.vector({0,})
+local MAX_FALL_SPEED = -400
+local FLAPP_SPEED = 250
+
+local player_state = BIRD_STATE.idle
+local time = 0
+
+local lume = require ("utils.lume")
+local hashes = require ("utils.hashes")
+
+function init(self)
+	self.position = go.get_position(".")
+	self.velocity = vmath.vector3()
+	self.acceleration = vmath.vector3(ACCELERATION)
+	self.rotation = 0
+	go.set(".","euler.z",self.rotation)
+end
+
+local function is_falling(self)
+	return self.velocity.y < -110
+end
+
+local function rotate_player(self,dt)	
+	if (self.velocity.y > 0) then self.rotation = self.rotation + 600 * dt
+	elseif (is_falling(self) or player_state==BIRD_STATE.dead) then 
+		self.rotation = self.rotation -  480 * dt 
+	end
+	self.rotation = lume.clamp(self.rotation,-90,20)
+	go.set(".","euler.z",self.rotation)
+end
+
+function update(self, dt)
+	if player_state == BIRD_STATE.idle then
+		--print("Bird is moving right and up and down")--ok. debug message
+		self.position.x = self.position.x + IDLE_SPEED*dt
+		time = time + dt
+		self.position.y = self.position.y + OSCILLATION_AMPLITUDE * math.sin(time * OSCILLATION_FREQUENCY)
+		go.set_position(self.position)
+	elseif player_state == BIRD_STATE.alive then 
+		self.position.x = self.position.x + IDLE_SPEED*dt
+		self.velocity = self.velocity + self.acceleration * dt
+		if self.velocity.y <MAX_FALL_SPEED then self.velocity.y = MAX_FALL_SPEED end				
+		self.position = self.position + self.velocity * dt		
+		rotate_player(self, dt)
+		go.set_position(self.position)	
+	elseif player_state == BIRD_STATE.dead then
+		print("You die")
+	end	
+end
+
+local function click(self)
+	self.velocity.y = FLAPP_SPEED
+	print("flapp")
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("set_player_state") then
+		player_state = message.state
+	end
+		
+	if player_state == BIRD_STATE.alive then
+		if message_id == hash("click") then
+			click(self)
+		end
+	end
+end

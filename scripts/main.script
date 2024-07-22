@@ -8,10 +8,17 @@ function on_message(self, message_id, message, sender)
 		--load main menu
 		msg.post("#main_menu_proxy", "load")--ok this should load but nothig happens
 		print("Trying to load main menu")
+	elseif message_id == hash("start_game")then
+		msg.post("#main_menu_proxy", "unload")
+		msg.post("#game_proxy", "load")
 	elseif message_id == hash("proxy_loaded") then
 		if sender == msg.url("#main_menu_proxy") then
 			msg.post(sender, "enable")--we cannot recieve inputs ?
 			msg.post(sender, "acquire_input_focus")-- from here we should set the input focus?		
-		end
+		elseif sender == msg.url("#game_proxy")then
+			print("the game should be active")
+			msg.post(sender, "enable")
+			msg.post(sender, "acquire_input_focus")
+		end		
 	end
 end
