@@ -15,7 +15,6 @@ local screen_height = 0.0
 
 local bird
 
-
 function init(self)
 	print("Main menu controller Init")
 	msg.post(".", "acquire_input_focus")	
@@ -42,7 +41,8 @@ function init(self)
 		go.get_id("ground"),
 		go.get_id("ground1"),
 		go.get_id("ground2"),
-		go.get_id("ground3")
+		go.get_id("ground3"),
+		go.get_id("ground4")
 	}
 	--setup the screen to world points
 	local w, h = window.get_size()
@@ -117,8 +117,7 @@ end
 function adjust_camera_fov(camera, mode)
 	local w, h = window.get_size()
 	screen_width = w
-	screen_height = h
-	
+	screen_height = h	
 
 	local aspect_ratio = screen_width / screen_height
 
@@ -213,18 +212,32 @@ function get_camera_corner_points()
 end
 --
 function update(self, dt)
-	adjust_camera_orthographic_zoom("area")
-	get_camera_corner_points()
-	for i, ground in ipairs(grounds) do
-		local pos = go.get_position(ground)
-		pos.x = pos.x - scroll_speed * dt
-		local x_screen = world_points.bottom_left.x
-		if pos.x <= x_screen -ground_width then
-			pos.x = pos.x + ground_width * #grounds
-		end
-		go.set_position(pos, ground)
-	end
-	--adjust_camera_fov(camera, "vertical")
+    adjust_camera_orthographic_zoom("area")
+    get_camera_corner_points()
+    
+    for i, ground in ipairs(grounds) do
+        local pos = go.get_position(ground)
+        pos.x = pos.x - scroll_speed * dt
+        local x_screen = world_points.bottom_left.x
+        
+        if pos.x <= x_screen - ground_width then
+            -- Find the maximum x position in the grounds table
+            local max_x = pos.x
+            for j, other_ground in ipairs(grounds) do
+                if other_ground ~= ground then
+                    local other_pos = go.get_position(other_ground)
+                    if other_pos.x > max_x then
+                        max_x = other_pos.x
+                    end
+                end
+            end
+            
+            -- Move the current ground to the farthest right position
+            pos.x = max_x + ground_width - scroll_speed*dt
+        end
+        
+        go.set_position(pos, ground)
+    end
 end
 
 
