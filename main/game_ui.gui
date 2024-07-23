@@ -1,4 +1,4 @@
-script: ""
+script: "/main/game_gui.gui_script"
 textures {
   name: "assets"
   texture: "/Images/assets.atlas"
@@ -58,8 +58,99 @@ layers {
 material: "/builtins/materials/gui.material"
 layouts {
   name: "Landscape"
+  nodes {
+    position {
+      x: 646.0
+      y: 533.0
+    }
+    scale {
+      x: 2.08
+      y: 2.08
+      z: 2.08
+    }
+    type: TYPE_BOX
+    id: "game_over_title"
+    overridden_fields: 1
+    overridden_fields: 3
+  }
+  nodes {
+    position {
+      x: 534.0
+      y: 191.0
+    }
+    scale {
+      x: 3.338712
+      y: 3.338712
+      z: 3.338712
+    }
+    type: TYPE_BOX
+    id: "btn_replay"
+    overridden_fields: 1
+    overridden_fields: 3
+  }
+  nodes {
+    position {
+      x: 768.0
+      y: 191.0
+    }
+    scale {
+      x: 3.338712
+      y: 3.338712
+      z: 3.338712
+    }
+    type: TYPE_BOX
+    id: "btn_leaderboard"
+    overridden_fields: 1
+    overridden_fields: 3
+  }
 }
 layouts {
   name: "Portrait"
+  nodes {
+    position {
+      x: 361.0
+      y: 1076.0
+    }
+    scale {
+      x: 2.568
+      y: 2.568
+      z: 2.568
+    }
+    type: TYPE_BOX
+    id: "game_over_title"
+    overridden_fields: 1
+    overridden_fields: 3
+    overridden_fields: 45
+  }
+  nodes {
+    position {
+      x: 209.0
+      y: 308.0
+    }
+    scale {
+      x: 3.28164
+      y: 3.28164
+      z: 3.28164
+    }
+    type: TYPE_BOX
+    id: "btn_replay"
+    overridden_fields: 1
+    overridden_fields: 3
+  }
+  nodes {
+    position {
+      x: 463.0
+      y: 308.0
+    }
+    scale {
+      x: 3.28164
+      y: 3.28164
+      z: 3.28164
+    }
+    type: TYPE_BOX
+    id: "btn_leaderboard"
+    overridden_fields: 1
+    overridden_fields: 3
+  }
 }
 adjust_reference: ADJUST_REFERENCE_PARENT

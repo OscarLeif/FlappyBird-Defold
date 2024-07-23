@@ -1,0 +1,19 @@
+local game_over_title_node
+local button_replay_node
+local button_leaderboard
+
+function init(self)
+	game_over_title_node = gui.get_node("game_over_title")
+	button_replay_node = gui.get_node("btn_replay")
+	button_leaderboarde = gui.get_node("btn_leaderboard")
+
+	gui.set_enabled(game_over_title_node, false)
+end
+
+function on_input(self, action_id, action)
+
+end
+
+function on_message(self, message_id, message, sender)
+
+end
