@@ -1,0 +1,65 @@
+script: ""
+textures {
+  name: "assets"
+  texture: "/Images/assets.atlas"
+}
+nodes {
+  position {
+    x: 145.0
+    y: 393.0
+  }
+  type: TYPE_BOX
+  texture: "assets/gameover"
+  id: "game_over_title"
+  layer: "GAME_OVER"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 91.0
+    y: 191.0
+  }
+  scale {
+    x: 1.4268
+    y: 1.4268
+    z: 1.4268
+  }
+  type: TYPE_BOX
+  texture: "assets/start_btn"
+  id: "btn_replay"
+  layer: "GAME_OVER"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 203.0
+    y: 191.0
+  }
+  scale {
+    x: 1.4268
+    y: 1.4268
+    z: 1.4268
+  }
+  type: TYPE_BOX
+  texture: "assets/leaderboard_btn"
+  id: "btn_leaderboard"
+  layer: "GAME_OVER"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+layers {
+  name: "HUD"
+}
+layers {
+  name: "GAME_OVER"
+}
+material: "/builtins/materials/gui.material"
+layouts {
+  name: "Landscape"
+}
+layouts {
+  name: "Portrait"
+}
+adjust_reference: ADJUST_REFERENCE_PARENT

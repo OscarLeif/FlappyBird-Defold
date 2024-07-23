@@ -221,7 +221,13 @@ function on_message(self, message_id, message, sender)
 		DISPLAY_WIDTH = message.width
 		DISPLAY_HEIGHT = message.height
 	end
+	
+	if (message_id == hashes.MESSAGE_GAME_OVER) then
+		state = STATES.game_over
+		print("Game over")
+	end
 end
+
 
 local function update_grounds()
     for _, ground in ipairs(grounds) do
