@@ -2,6 +2,8 @@ local game_over_title_node
 local button_replay_node
 local button_leaderboard
 
+local read_input = false
+
 function init(self)
 	game_over_title_node = gui.get_node("game_over_title")
 	button_replay_node = gui.get_node("btn_replay")
@@ -10,26 +12,34 @@ function init(self)
 	gui.set_enabled(game_over_title_node, false)
 	gui.set_enabled(button_replay_node, false)
 	gui.set_enabled(button_leaderboard, false)
+
+	--msg.post(".", "release_input_focus")--well it also disable the whole proxy input
 end
 
 function on_input(self, action_id, action)
-	if (action.pressed and gui.pick_node(gui.get_node("btn_replay"), action.x, action.y))then
-		print("Ok Restart the Game")--With fade
-		msg.post("main:/main#main", "start_game") --collectionName:/Gameobject#componentName
+	if (read_input == false) then return end
+
+	if (action.pressed and gui.pick_node(gui.get_node("btn_replay"), action.x, action.y)) then
+		print("Ok Restart the Game")        --With fade
+		msg.post("main:/main#main", "restart_game") --this is a URL --collectionName:/Gameobject#componentName
 	end
 
-	if (action.pressed and gui.pick_node(gui.get_node("btn_leaderboard"), action.x, action.y))then
-		print("Ok Now return to the main menu")--with fade
+	if (action.pressed and gui.pick_node(gui.get_node("btn_leaderboard"), action.x, action.y)) then
+		print("Ok Now return to the main menu") --with fade
 		msg.post("main:/main#main", "start_main_menu")
 	end
 end
 
 function on_message(self, message_id, message, sender)
 	if (message_id == hash("show")) then
-		print("Show the game over UI")
-		msg.post(".", "acquire_input_focus")	
-		gui.set_enabled(game_over_title_node,true)
-		gui.set_enabled(button_replay_node, true)
-		gui.set_enabled(button_leaderboard, true)
+		-- Delay the execution of the following function by 2 seconds
+		timer.delay(2, false, function()
+			print("Show the game over UI")
+			read_input = true
+			msg.post(".", "acquire_input_focus")
+			gui.set_enabled(game_over_title_node, true)
+			gui.set_enabled(button_replay_node, true)
+			gui.set_enabled(button_leaderboard, true)
+		end)
 	end
 end

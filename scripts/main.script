@@ -1,8 +1,11 @@
 local next_world_load
 
-local main_menu_proxy = "#main_menu_proxy"
-local game_proxy = "#game_proxy"
+local main_menu_proxy     = "#main_menu_proxy"
+local main_menu_proxy_url = msg.url("main:/main#main_menu_proxy")
 
+
+local game_proxy_url = msg.url("main:/main#game_proxy")          --URL
+local game_proxy     = "#game_proxy"
 
 function init(self)
 	print("main.script file init")
@@ -11,19 +14,23 @@ function init(self)
 end
 
 function on_message(self, message_id, message, sender)
-	if(message_id == hash("init")) then
+	if (message_id == hash("init")) then
 		self.state = "MAIN_MENU"
-		msg.post("#main_menu_proxy", "load") --x
+		print("Hello world")
+		--msg.post("#main_menu_proxy", "load") --works
+		--msg.post(main_menu_proxy, "load") --works
+		msg.post(main_menu_proxy_url, "load") --works
 	end
 
+	--Called From Game Scene
 	if (message_id == hash("start_main_menu")) then
+		msg.post("#game_proxy", "unload")
 		if self.state ~= "MAIN_MENU" then
 			if self.state == "GAME" then
-				msg.post("#game_proxy", "unload")
+				--msg.post("#game_proxy", "unload")
 			end
 		end
-
-		msg.post("#main_menu_proxy", "enable")		
+		msg.post("#main_menu_proxy", "enable")
 		self.state = "MAIN_MENU"
 	end
 
@@ -35,12 +42,19 @@ function on_message(self, message_id, message, sender)
 		end
 	end
 
+	--restart the game
+	if (message_id == hash("restart_game")) then
+		if self.state == "GAME" then
+			msg.post("#game_proxy", "unload")
+		end
+	end
 
 	---Proxy callbacks
 	if (message_id == hash("proxy_loaded")) then
 		print("proxy loaded")
+		print(sender) --This returns an URL
 
-		if(sender == msg.url("#main_menu_proxy"))then
+		if (sender == msg.url("#main_menu_proxy")) then
 			msg.post(sender, "enable")
 			msg.post(sender, "acquire_input_focus")
 		end
@@ -50,5 +64,10 @@ function on_message(self, message_id, message, sender)
 			msg.post(sender, "acquire_input_focus")
 			self.state = "GAME"
 		end
+	end
+
+	if (message_id == hash("proxy_unloaded")) then
+		print("reload the game")
+		msg.post("#game_proxy", "load")
 	end
 end

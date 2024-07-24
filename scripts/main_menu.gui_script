@@ -2,6 +2,7 @@
 
 -- Declare a local Lua Module Pointer
 local anim = require 'main.modules.animateCalls'
+local hashes = require 'utils.hashes'
 
 function init(self)
 	msg.post(".", "acquire_input_focus")	
@@ -18,8 +19,6 @@ function on_input(self, action_id, action)
 	if action.released and gui.pick_node(gui.get_node("playBtn"), action.x, action.y) then
 		--gui.play_flipbook(gui.get_node("playBtn"), hash("releasedButton"))
 		anim.animateButtonRelease(gui.get_node("playBtn"), 0.2)
-		print("Ok Here we should fade to next collection")
-		print("TODO: create a fade scene")
 		--for now lets just load the game collection
 		msg.post("main:/main#main", "start_game") --collectionName:/Gameobject#componentName
 	end

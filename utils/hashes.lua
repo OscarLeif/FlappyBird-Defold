@@ -1,4 +1,5 @@
 local M = {}
+M.Main = msg.url("main:/main#main")
 
 M.INPUT_FOCUS_GET=hash("acquire_input_focus")
 M.INPUT_FOCUS_RELEASE=hash("release_input_focus")
