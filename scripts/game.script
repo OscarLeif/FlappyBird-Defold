@@ -224,7 +224,8 @@ function on_message(self, message_id, message, sender)
 	
 	if (message_id == hashes.MESSAGE_GAME_OVER) then
 		state = STATES.game_over
-		print("Game over")
+		print("game.script Game over")
+		msg.post("go#game_ui", "show")
 	end
 end
 
