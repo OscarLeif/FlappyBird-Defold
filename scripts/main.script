@@ -6,11 +6,16 @@ local game_proxy = "#game_proxy"
 
 function init(self)
 	print("main.script file init")
-	msg.post(".", "start_main_menu")
+	msg.post(".", "init")
 	self.state = "MAIN_MENU"
 end
 
 function on_message(self, message_id, message, sender)
+	if(message_id == hash("init")) then
+		self.state = "MAIN_MENU"
+		msg.post("#main_menu_proxy", "load") --x
+	end
+
 	if (message_id == hash("start_main_menu")) then
 		if self.state ~= "MAIN_MENU" then
 			if self.state == "GAME" then
@@ -18,8 +23,7 @@ function on_message(self, message_id, message, sender)
 			end
 		end
 
-		msg.post("#main_menu_proxy", "enable")
-		msg.post("#main_menu_proxy", "load") --you cannot reload an already load
+		msg.post("#main_menu_proxy", "enable")		
 		self.state = "MAIN_MENU"
 	end
 
