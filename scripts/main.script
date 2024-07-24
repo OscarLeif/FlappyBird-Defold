@@ -1,24 +1,50 @@
+local next_world_load
+
+local main_menu_proxy = "#main_menu_proxy"
+local game_proxy = "#game_proxy"
+
+
 function init(self)
 	print("main.script file init")
-	msg.post(".", "main_menu_scene") --send message, the function bellow recieves the message
+	msg.post(".", "start_main_menu")
+	self.state = "MAIN_MENU"
 end
 
-function on_message(self, message_id, message, sender)	
-	if message_id == hash("main_menu_scene")then 
-		--load main menu
-		msg.post("#main_menu_proxy", "load")--ok this should load but nothig happens
-		print("Trying to load main menu")
-	elseif message_id == hash("start_game")then
-		msg.post("#main_menu_proxy", "unload")
-		msg.post("#game_proxy", "load")
-	elseif message_id == hash("proxy_loaded") then
-		if sender == msg.url("#main_menu_proxy") then
-			msg.post(sender, "enable")--we cannot recieve inputs ?
-			msg.post(sender, "acquire_input_focus")-- from here we should set the input focus?		
-		elseif sender == msg.url("#game_proxy")then
-			print("the game should be active")
+function on_message(self, message_id, message, sender)
+	if (message_id == hash("start_main_menu")) then
+		if self.state ~= "MAIN_MENU" then
+			if self.state == "GAME" then
+				msg.post("#game_proxy", "unload")
+			end
+		end
+
+		msg.post("#main_menu_proxy", "enable")
+		msg.post("#main_menu_proxy", "load") --you cannot reload an already load
+		self.state = "MAIN_MENU"
+	end
+
+	if (message_id == hash("start_game")) then
+		if self.state == "MAIN_MENU" then
+			msg.post("#main_menu_proxy", "disable")
+			msg.post("#game_proxy", "load")
+			self.state = "GAME"
+		end
+	end
+
+
+	---Proxy callbacks
+	if (message_id == hash("proxy_loaded")) then
+		print("proxy loaded")
+
+		if(sender == msg.url("#main_menu_proxy"))then
 			msg.post(sender, "enable")
 			msg.post(sender, "acquire_input_focus")
-		end		
+		end
+
+		if (sender == msg.url("#game_proxy")) then
+			msg.post(sender, "enable")
+			msg.post(sender, "acquire_input_focus")
+			self.state = "GAME"
+		end
 	end
 end

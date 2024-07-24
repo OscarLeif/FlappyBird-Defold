@@ -1,4 +1,4 @@
-script: "/main/game_gui.gui_script"
+script: "/scripts/game_gui.gui_script"
 textures {
   name: "assets"
   texture: "/Images/assets.atlas"

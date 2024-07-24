@@ -20,6 +20,7 @@ function on_input(self, action_id, action)
 
 	if (action.pressed and gui.pick_node(gui.get_node("btn_leaderboard"), action.x, action.y))then
 		print("Ok Now return to the main menu")--with fade
+		msg.post("main:/main#main", "start_main_menu")
 	end
 end
 
