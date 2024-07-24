@@ -13,6 +13,8 @@ local DISPLAY_HEIGHT = sys.get_config_int("display.height")
 local screen_width = 0.0
 local screen_height = 0.0
 
+local main_menu_gui = msg.url("main_menu:/UI#main_menu")--the .gui_script
+
 local bird
 
 function init(self)

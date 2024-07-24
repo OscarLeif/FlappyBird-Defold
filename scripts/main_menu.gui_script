@@ -21,6 +21,9 @@ function on_input(self, action_id, action)
 		anim.animateButtonRelease(gui.get_node("playBtn"), 0.2)
 		--for now lets just load the game collection
 		msg.post("main:/main#main", "start_game") --collectionName:/Gameobject#componentName
-	end
+	end	
+end
+
+function on_message(self, message_id, message)
 	
 end
