@@ -35,6 +35,9 @@ local grounds_scroll
 local ground_width
 local num_ground = 6
 
+local score = 0
+local game_gui 
+
 function InitGrounds()
 		ground_width = go.get("ground#sprite", "size.x")
 		local base_pos = go.get_position("ground")
@@ -62,6 +65,7 @@ function init(self)
 	pipe_factory = "pipe_factory#collection_factory"
 	base_ground_go = "ground_scroller/ground"--Ground game object
 	self.spawnPos = vmath.vector3()
+	--game_gui = go.get("game_ui")--fails!!!
 
 	if game_camera and go.exists(game_camera) then
 		print("Camera Found. Change Render")
@@ -225,8 +229,16 @@ function on_message(self, message_id, message, sender)
 	if (message_id == hashes.MESSAGE_GAME_OVER) then
 		state = STATES.game_over
 		print("game.script Game over")
-		msg.post("go#game_ui", "show")
+		msg.post("go#game_ui", "show")--one way to call
 	end
+
+	if(message_id == hashes.MESSAGE_INCREASE_SCORE)then
+		score = score +1		
+		msg.post("go#game_ui", hashes.MESSAGE_SET_SCORE, { score = score })
+	end
+
+	--we must send a message to increase the score	
+	
 end
 
 

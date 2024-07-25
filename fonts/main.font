@@ -1,0 +1,5 @@
+font: "/fonts/04b__19.ttf"
+material: "/builtins/fonts/font-df.material"
+size: 45
+output_format: TYPE_DISTANCE_FIELD
+characters: " !\"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"

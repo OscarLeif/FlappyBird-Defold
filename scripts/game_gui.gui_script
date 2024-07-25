@@ -4,10 +4,15 @@ local button_leaderboard
 
 local read_input = false
 
+local label_score 
+local hashes = require("utils.hashes")
+
 function init(self)
 	game_over_title_node = gui.get_node("game_over_title")
 	button_replay_node = gui.get_node("btn_replay")
 	button_leaderboard = gui.get_node("btn_leaderboard")
+
+	label_score = gui.get_node("label_score")
 
 	gui.set_enabled(game_over_title_node, false)
 	gui.set_enabled(button_replay_node, false)
@@ -31,6 +36,16 @@ function on_input(self, action_id, action)
 end
 
 function on_message(self, message_id, message, sender)
+
+	if message_id == hashes.MESSAGE_SET_SCORE then
+		if message and message.score then
+			print("set score: " .. message.score)
+			gui.set_text(label_score, tostring(message.score))
+		else
+			print("Error: message.score is nil or message is nil")
+		end
+	end
+	
 	if (message_id == hash("show")) then
 		-- Delay the execution of the following function by 2 seconds
 		timer.delay(2, false, function()

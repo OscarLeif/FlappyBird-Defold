@@ -87,6 +87,7 @@ function on_message(self, message_id, message, sender)
 			end
 		elseif (message_id == hashes.PHYSICS_MESSAGE_TRIGGER and message.enter) then
 			print("Increase score")
+			msg.post("game:/go#game", hashes.MESSAGE_INCREASE_SCORE)
 		end
 	elseif player_state == BIRD_STATE.dead then
 		if (message.group == hashes.DIRT) then
