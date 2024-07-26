@@ -1,26 +1,10 @@
 key_trigger {
-  input: KEY_P
-  action: "+"
-}
-key_trigger {
-  input: KEY_O
-  action: "-"
-}
-key_trigger {
   input: KEY_UP
   action: "up"
 }
 key_trigger {
   input: KEY_DOWN
   action: "down"
-}
-key_trigger {
-  input: KEY_SPACE
-  action: "select"
-}
-key_trigger {
-  input: KEY_ENTER
-  action: "select"
 }
 key_trigger {
   input: KEY_LEFT
@@ -30,12 +14,32 @@ key_trigger {
   input: KEY_RIGHT
   action: "right"
 }
+key_trigger {
+  input: KEY_SPACE
+  action: "select"
+}
 mouse_trigger {
   input: MOUSE_BUTTON_1
   action: "touch"
 }
 gamepad_trigger {
   input: GAMEPAD_RAW
+  action: "raw"
+}
+gamepad_trigger {
+  input: GAMEPAD_RPAD_DOWN
+  action: "select"
+}
+gamepad_trigger {
+  input: GAMEPAD_RPAD_UP
+  action: ""
+}
+gamepad_trigger {
+  input: GAMEPAD_RPAD_LEFT
+  action: ""
+}
+gamepad_trigger {
+  input: GAMEPAD_RPAD_RIGHT
   action: ""
 }
 gamepad_trigger {
@@ -53,24 +57,4 @@ gamepad_trigger {
 gamepad_trigger {
   input: GAMEPAD_LPAD_UP
   action: "up"
-}
-gamepad_trigger {
-  input: GAMEPAD_RPAD_DOWN
-  action: "select"
-}
-gamepad_trigger {
-  input: GAMEPAD_LSTICK_LEFT
-  action: "left"
-}
-gamepad_trigger {
-  input: GAMEPAD_LSTICK_RIGHT
-  action: "right"
-}
-gamepad_trigger {
-  input: GAMEPAD_LSTICK_UP
-  action: "up"
-}
-gamepad_trigger {
-  input: GAMEPAD_LSTICK_DOWN
-  action: "down"
 }

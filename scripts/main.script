@@ -23,7 +23,7 @@ end
 function on_message(self, message_id, message, sender)
 	if (message_id == hash("init")) then
 		self.state = STATES.MAIN_MENU
-		print("Hello world")
+		print("main.script load main_menu_proxy")
 		--msg.post("#main_menu_proxy", "load") --works
 		--msg.post(main_menu_proxy, "load") --works
 		msg.post(main_menu_proxy_url, "load") --works
@@ -44,6 +44,7 @@ function on_message(self, message_id, message, sender)
 		end		
 	end
 
+	--Called from the game_proxy itself to reload the game
 	if (message_id == hash("start_game")) then
 		if self.state == STATES.MAIN_MENU then
 			msg.post("#main_menu_proxy", "disable")

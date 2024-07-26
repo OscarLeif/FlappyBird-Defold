@@ -84,8 +84,8 @@ layouts {
       y: 209.0
     }
     size {
-      x: 208.0
-      y: 116.0
+      x: 180.0
+      y: 95.0
     }
     type: TYPE_BOX
     id: "playBtn"
@@ -99,8 +99,8 @@ layouts {
       y: 82.0
     }
     size {
-      x: 208.0
-      y: 116.0
+      x: 180.0
+      y: 95.0
     }
     type: TYPE_BOX
     id: "exitBtn"
