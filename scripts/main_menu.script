@@ -1,9 +1,8 @@
-
 local scroll_speed = 100.0 -- float
-local ground_width = 336 -- int (width of your ground image)
+local ground_width = 336   -- int (width of your ground image)
 
-local grounds = {} --table (like an array)
-local menu_camera -- Local variable for the camera component
+local grounds = {}         --table (like an array)
+local menu_camera          -- Local variable for the camera component
 local screen_points = {}
 local world_points = {}
 
@@ -13,32 +12,32 @@ local DISPLAY_HEIGHT = sys.get_config_int("display.height")
 local screen_width = 0.0
 local screen_height = 0.0
 
-local main_menu_gui = msg.url("main_menu:/UI#main_menu")--the .gui_script
+local main_menu_gui = msg.url("main_menu:/UI#main_menu") --the .gui_script
 
 local bird
 
 function init(self)
 	print("Main menu controller Init")
-	msg.post(".", "acquire_input_focus")	
+	msg.post(".", "acquire_input_focus")
 	menu_camera = "Camera#camera" -- get the camera component
 	msg.post("@render:", "use_camera_projection")
 	msg.post(menu_camera, "acquire_camera_focus")
-	bird = "bird" 
+	bird = "bird"
 	if bird and go.exists(bird) then
 		print("Bird was found")
 		local to = go.get(bird, "position")
 		to.y = to.y + 20
 		go.animate(bird, "position", go.PLAYBACK_LOOP_PINGPONG, to, go.EASING_INOUTSINE, 2)
-	else 
+	else
 		print("bird not found")
 	end
-	
-	if menu_camera and go.exists(menu_camera) then 
+
+	if menu_camera and go.exists(menu_camera) then
 		print("Camera Found")
-	else 
+	else
 		print("Error: Camera component not found!")
-	end	
-	grounds= 
+	end
+	grounds =
 	{
 		go.get_id("ground"),
 		go.get_id("ground1"),
@@ -58,30 +57,19 @@ function init(self)
 		bottom_left = vmath.vector3(0, screen_height, 0),
 		bottom_right = vmath.vector3(screen_width, screen_height, 0)
 	}
-	
+
 	print("menu controller End")
 end
 
---camera helper TODO
-local function screen_to_world(x, y, z, camera)
-	local projection = go.get(camera, "projection")
-	local view = go.get(camera, "view")
-	local w, h = window.get_size()
-	-- The window.get_size() function will return the scaled window size,
-	-- ie taking into account display scaling (Retina screens on macOS for
-	-- instance). We need to adjust for display scaling in our calculation.
-	w = w / (w / DISPLAY_WIDTH)
-	h = h / (h / DISPLAY_HEIGHT)
-
-	-- https://defold.com/manuals/camera/#converting-mouse-to-world-coordinates
+local function screen_to_world(sx, sy, sz, window_width, window_height, projection, view)
 	local inv = vmath.inv(projection * view)
-	x = (2 * x / w) - 1
-	y = (2 * y / h) - 1
-	z = (2 * z) - 1
-	local x1 = x * inv.m00 + y * inv.m01 + z * inv.m02 + inv.m03
-	local y1 = x * inv.m10 + y * inv.m11 + z * inv.m12 + inv.m13
-	local z1 = x * inv.m20 + y * inv.m21 + z * inv.m22 + inv.m23
-	return x1, y1, z1
+	sx = (2 * sx / window_width) - 1
+	sy = (2 * sy / window_height) - 1
+	sz = (2 * sz) - 1
+	local wx = sx * inv.m00 + sy * inv.m01 + sz * inv.m02 + inv.m03
+	local wy = sx * inv.m10 + sy * inv.m11 + sz * inv.m12 + inv.m13
+	local wz = sx * inv.m20 + sy * inv.m21 + sz * inv.m22 + inv.m23
+	return wx, wy, wz
 end
 
 local function adjust_camera_orthographic_zoom(fit_mode)
@@ -115,11 +103,11 @@ local function adjust_camera_orthographic_zoom(fit_mode)
 	--print("New Ortho zoom: " .. new_ortho_zoom)
 end
 
---not tested 
+--not tested
 function adjust_camera_fov(camera, mode)
 	local w, h = window.get_size()
 	screen_width = w
-	screen_height = h	
+	screen_height = h
 
 	local aspect_ratio = screen_width / screen_height
 
@@ -161,16 +149,18 @@ function adjust_camera_fov(camera, mode)
 end
 
 function on_input(self, action_id, action)
-	
 	if action_id == hash("touch") and action.pressed then
 		-- convert mouse/touch screen position to world position
-		print("screen X:" .. action.x .. " Y:"..action.y)
-		local worldx, worldy = screen_to_world(action.x, action.y, 0, "#camera")
+		local w, h = window.get_size()
+		local projection = go.get(menu_camera, "projection")
+		local view = go.get(menu_camera, "view")
+		print("screen X:" .. action.x .. " Y:" .. action.y)
+		local worldx, worldy = screen_to_world(action.x, action.y, 0, w, h)
 		local world = vmath.vector3(worldx, worldy, 0)
 		--go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, world, go.EASING_LINEAR, 0.5, 0, moved_to_position) -- <8>
 	end
-	
-	if action_id == hash("+") and action.released then		
+
+	if action_id == hash("+") and action.released then
 		--local current_fov = camera.get_fov(menu_camera)
 		--camera.set_fov(menu_camera, current_fov + 0.01)
 		--print("FOV: " .. camera.get_fov(menu_camera))
@@ -189,21 +179,27 @@ function on_input(self, action_id, action)
 	end
 end
 
-
 local function get_camera_corner_points()
 	-- Convert screen points to world points and store in self
 	--weird it returns x,y,z
 	----local worldx, worldy = screen_to_world(action.x, action.y, 0, "#camera")
-	local topLeftx, topLefty = screen_to_world(0, screen_height, 0, menu_camera)
-	local topRightx,topRighty = screen_to_world(screen_width, screen_height, 0, menu_camera)
-	local bottomLeftx,bottomLefty = screen_to_world(0, 0, 0, menu_camera)
-	local bottomRightx,bottomRighty = screen_to_world(screen_width, 0, 0, menu_camera)
-	
+	local w, h = window.get_size()
+	screen_width = w
+	screen_height = h
+
+	local projection = go.get(menu_camera, "projection")
+	local view = go.get(menu_camera, "view")
+
+	local topLeftx, topLefty = screen_to_world(0, screen_height, 0, w, h, projection, view)
+	local topRightx, topRighty = screen_to_world(screen_width, screen_height, 0, w, h, projection, view)
+	local bottomLeftx, bottomLefty = screen_to_world(0, 0, 0, w, h, projection, view)
+	local bottomRightx, bottomRighty = screen_to_world(screen_width, 0, 0, w, h, projection, view)
+
 	world_points = {
-		top_left = vmath.vector3(topLeftx,topLefty,0),
-		top_right = vmath.vector3(topRightx, topRighty,0),
-		bottom_left = vmath.vector3(bottomLeftx,bottomLefty,0),
-		bottom_right = vmath.vector3(bottomRightx, bottomRighty,0),
+		top_left = vmath.vector3(topLeftx, topLefty, 0),
+		top_right = vmath.vector3(topRightx, topRighty, 0),
+		bottom_left = vmath.vector3(bottomLeftx, bottomLefty, 0),
+		bottom_right = vmath.vector3(bottomRightx, bottomRighty, 0),
 	}
 
 	-- Print the world points for verification
@@ -214,32 +210,30 @@ local function get_camera_corner_points()
 end
 --
 function update(self, dt)
-    adjust_camera_orthographic_zoom("area")
-    get_camera_corner_points()
-    
-    for i, ground in ipairs(grounds) do
-        local pos = go.get_position(ground)
-        pos.x = pos.x - scroll_speed * dt
-        local x_screen = world_points.bottom_left.x
-        
-        if pos.x <= x_screen - ground_width then
-            -- Find the maximum x position in the grounds table
-            local max_x = pos.x
-            for j, other_ground in ipairs(grounds) do
-                if other_ground ~= ground then
-                    local other_pos = go.get_position(other_ground)
-                    if other_pos.x > max_x then
-                        max_x = other_pos.x
-                    end
-                end
-            end
-            
-            -- Move the current ground to the farthest right position
-            pos.x = max_x + ground_width - scroll_speed*dt
-        end
-        
-        go.set_position(pos, ground)
-    end
+	adjust_camera_orthographic_zoom("area")
+	get_camera_corner_points()
+
+	for i, ground in ipairs(grounds) do
+		local pos = go.get_position(ground)
+		pos.x = pos.x - scroll_speed * dt
+		local x_screen = world_points.bottom_left.x
+
+		if pos.x <= x_screen - ground_width then
+			-- Find the maximum x position in the grounds table
+			local max_x = pos.x
+			for j, other_ground in ipairs(grounds) do
+				if other_ground ~= ground then
+					local other_pos = go.get_position(other_ground)
+					if other_pos.x > max_x then
+						max_x = other_pos.x
+					end
+				end
+			end
+
+			-- Move the current ground to the farthest right position
+			pos.x = max_x + ground_width - scroll_speed * dt
+		end
+
+		go.set_position(pos, ground)
+	end
 end
-
-
