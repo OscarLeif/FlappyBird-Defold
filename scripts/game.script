@@ -37,6 +37,7 @@ local num_ground = 6
 
 local score = 0
 local game_gui 
+local utils = require("utils.utils")
 
 function InitGrounds()
 		ground_width = go.get("ground#sprite", "size.x")
@@ -140,39 +141,6 @@ local function spawn_pipe()
 	--
 end
 
---camera helper
--- local function screen_to_world(x, y, z, camera)
--- 	local projection = go.get(camera, "projection")
--- 	local view = go.get(camera, "view")
--- 	local w, h = window.get_size()
--- 	-- The window.get_size() function will return the scaled window size,
--- 	-- ie taking into account display scaling (Retina screens on macOS for
--- 	-- instance). We need to adjust for display scaling in our calculation.
--- 	w = w / (w / DISPLAY_WIDTH)
--- 	h = h / (h / DISPLAY_HEIGHT)
-
--- 	-- https://defold.com/manuals/camera/#converting-mouse-to-world-coordinates
--- 	local inv = vmath.inv(projection * view)
--- 	x = (2 * x / w) - 1
--- 	y = (2 * y / h) - 1
--- 	z = (2 * z) - 1
--- 	local x1 = x * inv.m00 + y * inv.m01 + z * inv.m02 + inv.m03
--- 	local y1 = x * inv.m10 + y * inv.m11 + z * inv.m12 + inv.m13
--- 	local z1 = x * inv.m20 + y * inv.m21 + z * inv.m22 + inv.m23
--- 	return x1, y1, z1
--- end
-
-local function screen_to_world(sx, sy, sz, window_width, window_height, projection, view)
-	local inv = vmath.inv(projection * view)
-	sx = (2 * sx / window_width) - 1
-	sy = (2 * sy / window_height) - 1
-	sz = (2 * sz) - 1
-	local wx = sx * inv.m00 + sy * inv.m01 + sz * inv.m02 + inv.m03
-	local wy = sx * inv.m10 + sy * inv.m11 + sz * inv.m12 + inv.m13
-	local wz = sx * inv.m20 + sy * inv.m21 + sz * inv.m22 + inv.m23
-	return wx, wy, wz
-end
-
 local function adjust_camera_orthographic_zoom(fit_mode, _camera)
 	local current_ortho_zoom = camera.get_orthographic_zoom(_camera)
 	--print("Current Ortho zoom: " .. current_ortho_zoom)
@@ -205,10 +173,6 @@ local function adjust_camera_orthographic_zoom(fit_mode, _camera)
 end
 
 local function get_camera_corner_points(camera)
-	-- Convert screen points to world points and store in self
-	--weird it returns x,y,z
-	----local worldx, worldy = screen_to_world(action.x, action.y, 0, "#camera")
-	--we have issues when the viewport is resized.
 	local w, h = window.get_size()
 	screen_width = w
 	screen_height = h
@@ -216,10 +180,10 @@ local function get_camera_corner_points(camera)
 	local projection = go.get(camera, "projection")
 	local view = go.get(camera, "view")
 
-	local topLeftx, topLefty = screen_to_world(0, screen_height, 0, w, h, projection, view)
-	local topRightx, topRighty = screen_to_world(screen_width, screen_height, 0, w, h, projection, view)
-	local bottomLeftx, bottomLefty = screen_to_world(0, 0, 0, w, h, projection, view)
-	local bottomRightx, bottomRighty = screen_to_world(screen_width, 0, 0, w, h, projection, view)
+	local topLeftx, topLefty = utils.screen_to_world(0, screen_height, 0, w, h, projection, view)
+	local topRightx, topRighty = utils.screen_to_world(screen_width, screen_height, 0, w, h, projection, view)
+	local bottomLeftx, bottomLefty = utils.screen_to_world(0, 0, 0, w, h, projection, view)
+	local bottomRightx, bottomRighty = utils.screen_to_world(screen_width, 0, 0, w, h, projection, view)
 
 	world_points = {
 		top_left = vmath.vector3(topLeftx, topLefty, 5),

@@ -15,6 +15,7 @@ local screen_height = 0.0
 local main_menu_gui = msg.url("main_menu:/UI#main_menu") --the .gui_script
 
 local bird
+local utils = require "utils.utils"
 
 function init(self)
 	print("Main menu controller Init")
@@ -59,17 +60,6 @@ function init(self)
 	}
 
 	print("menu controller End")
-end
-
-local function screen_to_world(sx, sy, sz, window_width, window_height, projection, view)
-	local inv = vmath.inv(projection * view)
-	sx = (2 * sx / window_width) - 1
-	sy = (2 * sy / window_height) - 1
-	sz = (2 * sz) - 1
-	local wx = sx * inv.m00 + sy * inv.m01 + sz * inv.m02 + inv.m03
-	local wy = sx * inv.m10 + sy * inv.m11 + sz * inv.m12 + inv.m13
-	local wz = sx * inv.m20 + sy * inv.m21 + sz * inv.m22 + inv.m23
-	return wx, wy, wz
 end
 
 local function adjust_camera_orthographic_zoom(fit_mode)
@@ -155,7 +145,7 @@ function on_input(self, action_id, action)
 		local projection = go.get(menu_camera, "projection")
 		local view = go.get(menu_camera, "view")
 		print("screen X:" .. action.x .. " Y:" .. action.y)
-		local worldx, worldy = screen_to_world(action.x, action.y, 0, w, h)
+		local worldx, worldy = utils.screen_to_world(action.x, action.y, 0, w, h, projection, view)
 		local world = vmath.vector3(worldx, worldy, 0)
 		--go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, world, go.EASING_LINEAR, 0.5, 0, moved_to_position) -- <8>
 	end
@@ -164,7 +154,7 @@ function on_input(self, action_id, action)
 		--local current_fov = camera.get_fov(menu_camera)
 		--camera.set_fov(menu_camera, current_fov + 0.01)
 		--print("FOV: " .. camera.get_fov(menu_camera))
-		local ortho_zoom = camera.get_orthographic_zoom(menu_camera) + 0.01
+		local ortho_zoom = menu_camera.get_orthographic_zoom(menu_camera) + 0.01
 		print("zoom apply: " .. ortho_zoom)
 		--camera.set_orthographic_zoom(menu_camera, ortho_zoom)--I think this doesnt work
 		go.set(menu_camera, "orthographic_zoom", ortho_zoom)
@@ -179,39 +169,9 @@ function on_input(self, action_id, action)
 	end
 end
 
-local function get_camera_corner_points()
-	-- Convert screen points to world points and store in self
-	--weird it returns x,y,z
-	----local worldx, worldy = screen_to_world(action.x, action.y, 0, "#camera")
-	local w, h = window.get_size()
-	screen_width = w
-	screen_height = h
-
-	local projection = go.get(menu_camera, "projection")
-	local view = go.get(menu_camera, "view")
-
-	local topLeftx, topLefty = screen_to_world(0, screen_height, 0, w, h, projection, view)
-	local topRightx, topRighty = screen_to_world(screen_width, screen_height, 0, w, h, projection, view)
-	local bottomLeftx, bottomLefty = screen_to_world(0, 0, 0, w, h, projection, view)
-	local bottomRightx, bottomRighty = screen_to_world(screen_width, 0, 0, w, h, projection, view)
-
-	world_points = {
-		top_left = vmath.vector3(topLeftx, topLefty, 0),
-		top_right = vmath.vector3(topRightx, topRighty, 0),
-		bottom_left = vmath.vector3(bottomLeftx, bottomLefty, 0),
-		bottom_right = vmath.vector3(bottomRightx, bottomRighty, 0),
-	}
-
-	-- Print the world points for verification
-	--print("Top Left: ", world_points.top_left)
-	--print("Top Right: ", world_points.top_right)
-	--print("Bottom Left: ", world_points.bottom_left)
-	--print("Bottom Right: ", world_points.bottom_right)
-end
---
 function update(self, dt)
 	adjust_camera_orthographic_zoom("area")
-	get_camera_corner_points()
+	world_points = utils.get_camera_corner_points(menu_camera)
 
 	for i, ground in ipairs(grounds) do
 		local pos = go.get_position(ground)
