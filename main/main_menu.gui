@@ -80,18 +80,32 @@ layouts {
   }
   nodes {
     position {
-      x: 646.0
-      y: 154.0
+      x: 636.0
+      y: 209.0
     }
-    scale {
-      x: 1.64
-      y: 1.64
-      z: 1.64
+    size {
+      x: 208.0
+      y: 116.0
     }
     type: TYPE_BOX
     id: "playBtn"
     overridden_fields: 1
     overridden_fields: 3
+    overridden_fields: 4
+  }
+  nodes {
+    position {
+      x: 636.0
+      y: 82.0
+    }
+    size {
+      x: 208.0
+      y: 116.0
+    }
+    type: TYPE_BOX
+    id: "exitBtn"
+    overridden_fields: 1
+    overridden_fields: 4
   }
 }
 layouts {
@@ -121,11 +135,6 @@ layouts {
       x: 352.0
       y: 312.0
     }
-    scale {
-      x: 1.0664
-      y: 1.0664
-      z: 1.0664
-    }
     size {
       x: 208.0
       y: 116.0
@@ -141,15 +150,15 @@ layouts {
       x: 354.0
       y: 150.0
     }
-    scale {
-      x: 1.8
-      y: 1.8
-      z: 1.8
+    size {
+      x: 208.0
+      y: 116.0
     }
     type: TYPE_BOX
     id: "exitBtn"
     overridden_fields: 1
     overridden_fields: 3
+    overridden_fields: 4
   }
 }
 adjust_reference: ADJUST_REFERENCE_PARENT

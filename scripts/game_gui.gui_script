@@ -1,60 +1,129 @@
-local game_over_title_node
-local button_replay_node
-local button_leaderboard
-
-local read_input = false
-
-local label_score 
 local hashes = require("utils.hashes")
 
+local focus_index = 1
+local focus_scale = vmath.vector3(1.2, 1.2, 1)
+local default_scale = vmath.vector3(1, 1, 1)
+
+local NODE_IDS = {
+    game_over_title = "game_over_title",
+    play_button = "playBtn",
+    exit_button = "exitBtn",
+    label_score = "label_score"
+}
+
+local buttons = { NODE_IDS.play_button, NODE_IDS.exit_button }
+local button_neighbors = {
+    [NODE_IDS.play_button] = { right = NODE_IDS.exit_button },
+    [NODE_IDS.exit_button] = { left = NODE_IDS.play_button }
+}
+
+local nodes = {}
+local read_input = false
+
+local function OnClickRestartGame()
+    print("Ok Restart the Game")
+    msg.post("main:/main#main", "restart_game")
+end
+
+local function OnClickMainMenu()
+    print("Ok Now return to the main menu")
+    msg.post("main:/main#main", "start_main_menu")
+end
+
+local function focus_button(button_id)
+    for id, _ in pairs(button_neighbors) do
+        local scale = (id == button_id) and focus_scale or default_scale
+        print("Setting scale for", id, "to", scale)
+        gui.set_scale(nodes[id], scale)
+    end
+end
+
+local function navigate(direction)
+    local new_focus_index = focus_index
+    if direction == "up" then
+        new_focus_index = focus_index - 1
+    elseif direction == "down" then
+        new_focus_index = focus_index + 1
+    elseif direction == "left" then
+        new_focus_index = focus_index - 1
+    elseif direction == "right" then
+        new_focus_index = focus_index + 1
+    end
+
+    if new_focus_index < 1 then
+        new_focus_index = #buttons
+    elseif new_focus_index > #buttons then
+        new_focus_index = 1
+    end
+
+    focus_index = new_focus_index
+    focus_button(buttons[focus_index])
+end
+
+local function press_button()
+    local button_id = buttons[focus_index]
+    print("Pressed button: " .. button_id)
+    if button_id == NODE_IDS.play_button then
+        OnClickRestartGame()
+    elseif button_id == NODE_IDS.exit_button then
+        OnClickMainMenu()
+    end
+end
+
 function init(self)
-	game_over_title_node = gui.get_node("game_over_title")
-	button_replay_node = gui.get_node("btn_replay")
-	button_leaderboard = gui.get_node("btn_leaderboard")
+    nodes[NODE_IDS.game_over_title] = gui.get_node(NODE_IDS.game_over_title)
+    nodes[NODE_IDS.play_button] = gui.get_node(NODE_IDS.play_button)
+    nodes[NODE_IDS.exit_button] = gui.get_node(NODE_IDS.exit_button)
+    nodes[NODE_IDS.label_score] = gui.get_node(NODE_IDS.label_score)
 
-	label_score = gui.get_node("label_score")
-
-	gui.set_enabled(game_over_title_node, false)
-	gui.set_enabled(button_replay_node, false)
-	gui.set_enabled(button_leaderboard, false)
-
-	--msg.post(".", "release_input_focus")--well it also disable the whole proxy input
+    gui.set_enabled(nodes[NODE_IDS.game_over_title], false)
+    gui.set_enabled(nodes[NODE_IDS.play_button], false)
+    gui.set_enabled(nodes[NODE_IDS.exit_button], false)
 end
 
 function on_input(self, action_id, action)
-	if (read_input == false) then return end
+    if not read_input then return end
 
-	if (action.pressed and gui.pick_node(gui.get_node("btn_replay"), action.x, action.y)) then
-		print("Ok Restart the Game")        --With fade
-		msg.post("main:/main#main", "restart_game") --this is a URL --collectionName:/Gameobject#componentName
-	end
+    if action_id == hash("up") and action.pressed then
+        navigate("up")
+    elseif action_id == hash("down") and action.pressed then
+        navigate("down")
+    elseif action_id == hash("left") and action.pressed then
+        navigate("left")
+    elseif action_id == hash("right") and action.pressed then
+        navigate("right")
+    elseif action_id == hash("select") and action.pressed then
+        press_button()
+    end
 
-	if (action.pressed and gui.pick_node(gui.get_node("btn_leaderboard"), action.x, action.y)) then
-		print("Ok Now return to the main menu") --with fade
-		msg.post("main:/main#main", "start_main_menu")
-	end
+    if action.pressed then
+        if gui.pick_node(nodes[NODE_IDS.play_button], action.x, action.y) then
+            OnClickRestartGame()
+        elseif gui.pick_node(nodes[NODE_IDS.exit_button], action.x, action.y) then
+            OnClickMainMenu()
+        end
+    end
 end
 
 function on_message(self, message_id, message, sender)
+    if message_id == hashes.MESSAGE_SET_SCORE then
+        if message and message.score then
+            print("set score: " .. message.score)
+            gui.set_text(nodes[NODE_IDS.label_score], tostring(message.score))
+        else
+            print("Error: message.score is nil or message is nil")
+        end
+    end
 
-	if message_id == hashes.MESSAGE_SET_SCORE then
-		if message and message.score then
-			print("set score: " .. message.score)
-			gui.set_text(label_score, tostring(message.score))
-		else
-			print("Error: message.score is nil or message is nil")
-		end
-	end
-	
-	if (message_id == hash("show")) then
-		-- Delay the execution of the following function by 2 seconds
-		timer.delay(2, false, function()
-			print("Show the game over UI")
-			read_input = true
-			msg.post(".", "acquire_input_focus")
-			gui.set_enabled(game_over_title_node, true)
-			gui.set_enabled(button_replay_node, true)
-			gui.set_enabled(button_leaderboard, true)
-		end)
-	end
+    if message_id == hash("show") then
+        timer.delay(2, false, function()
+            print("Show the game over UI")
+            read_input = true
+            msg.post(".", "acquire_input_focus")
+            focus_button(NODE_IDS.play_button)
+            gui.set_enabled(nodes[NODE_IDS.game_over_title], true)
+            gui.set_enabled(nodes[NODE_IDS.play_button], true)
+            gui.set_enabled(nodes[NODE_IDS.exit_button], true)
+        end)
+    end
 end

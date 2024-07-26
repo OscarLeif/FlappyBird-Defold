@@ -90,11 +90,11 @@ end
 function on_input(self, action_id, action)
 	local pressFlap = false
 	
-	if action_id == hash("dpad_center") and action.pressed then
-		print("DPAD_CENTER pressed")
-		-- Handle the DPAD_CENTER action here
-		pressFlap=true
-	end
+	-- if action_id == hash("dpad_center") and action.pressed then
+	-- 	print("DPAD_CENTER pressed")
+	-- 	-- Handle the DPAD_CENTER action here
+	-- 	pressFlap=true
+	-- end
 	
 	if action_id == hash("raw") then
 		pprint(action.gamepad_buttons)
