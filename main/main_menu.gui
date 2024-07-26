@@ -3,127 +3,56 @@ textures {
   name: "assets"
   texture: "/Images/assets.atlas"
 }
-background_color {
-  x: 0.0
-  y: 0.0
-  z: 0.0
-  w: 0.0
-}
 nodes {
   position {
     x: 150.0
     y: 322.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
   }
   size {
     x: 178.0
     y: 48.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
   }
   type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
   texture: "assets/Title"
   id: "menuPanel"
-  xanchor: XANCHOR_NONE
-  yanchor: YANCHOR_NONE
-  pivot: PIVOT_CENTER
-  adjust_mode: ADJUST_MODE_FIT
   layer: "background"
   inherit_alpha: true
-  slice9 {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 0.0
-  }
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  template_node_child: false
-  size_mode: SIZE_MODE_MANUAL
-  custom_type: 0
-  enabled: true
-  visible: true
-  material: ""
 }
 nodes {
   position {
     x: 145.0
     y: 154.0
-    z: 0.0
-    w: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
   }
   size {
     x: 104.0
     y: 58.0
-    z: 0.0
-    w: 1.0
-  }
-  color {
-    x: 1.0
-    y: 1.0
-    z: 1.0
-    w: 1.0
   }
   type: TYPE_BOX
-  blend_mode: BLEND_MODE_ALPHA
   texture: "assets/start_btn"
   id: "playBtn"
   xanchor: XANCHOR_LEFT
   yanchor: YANCHOR_TOP
-  pivot: PIVOT_CENTER
   adjust_mode: ADJUST_MODE_ZOOM
   layer: "menu"
   inherit_alpha: true
-  slice9 {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 0.0
+}
+nodes {
+  position {
+    x: 145.0
+    y: 82.0
   }
-  clipping_mode: CLIPPING_MODE_NONE
-  clipping_visible: true
-  clipping_inverted: false
-  alpha: 1.0
-  template_node_child: false
-  size_mode: SIZE_MODE_MANUAL
-  custom_type: 0
-  enabled: true
-  visible: true
-  material: ""
+  size {
+    x: 104.0
+    y: 58.0
+  }
+  type: TYPE_BOX
+  texture: "assets/start_btn"
+  id: "exitBtn"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_TOP
+  adjust_mode: ADJUST_MODE_ZOOM
+  layer: "menu"
+  inherit_alpha: true
 }
 layers {
   name: "background"
@@ -138,121 +67,31 @@ layouts {
     position {
       x: 637.0
       y: 578.0995
-      z: 0.0
-      w: 1.0
-    }
-    rotation {
-      x: 0.0
-      y: 0.0
-      z: 0.0
-      w: 1.0
     }
     scale {
       x: 2.04
       y: 2.04
       z: 2.04
-      w: 1.0
-    }
-    size {
-      x: 178.0
-      y: 48.0
-      z: 0.0
-      w: 1.0
-    }
-    color {
-      x: 1.0
-      y: 1.0
-      z: 1.0
-      w: 1.0
     }
     type: TYPE_BOX
-    blend_mode: BLEND_MODE_ALPHA
-    texture: "assets/Title"
     id: "menuPanel"
-    xanchor: XANCHOR_NONE
-    yanchor: YANCHOR_NONE
-    pivot: PIVOT_CENTER
-    adjust_mode: ADJUST_MODE_FIT
-    layer: "background"
-    inherit_alpha: true
-    slice9 {
-      x: 0.0
-      y: 0.0
-      z: 0.0
-      w: 0.0
-    }
-    clipping_mode: CLIPPING_MODE_NONE
-    clipping_visible: true
-    clipping_inverted: false
-    alpha: 1.0
     overridden_fields: 1
     overridden_fields: 3
-    template_node_child: false
-    size_mode: SIZE_MODE_MANUAL
-    custom_type: 0
-    enabled: true
-    visible: true
-    material: ""
   }
   nodes {
     position {
       x: 646.0
       y: 154.0
-      z: 0.0
-      w: 1.0
-    }
-    rotation {
-      x: 0.0
-      y: 0.0
-      z: 0.0
-      w: 1.0
     }
     scale {
       x: 1.64
       y: 1.64
       z: 1.64
-      w: 1.0
-    }
-    size {
-      x: 104.0
-      y: 58.0
-      z: 0.0
-      w: 1.0
-    }
-    color {
-      x: 1.0
-      y: 1.0
-      z: 1.0
-      w: 1.0
     }
     type: TYPE_BOX
-    blend_mode: BLEND_MODE_ALPHA
-    texture: "assets/start_btn"
     id: "playBtn"
-    xanchor: XANCHOR_LEFT
-    yanchor: YANCHOR_TOP
-    pivot: PIVOT_CENTER
-    adjust_mode: ADJUST_MODE_ZOOM
-    layer: "menu"
-    inherit_alpha: true
-    slice9 {
-      x: 0.0
-      y: 0.0
-      z: 0.0
-      w: 0.0
-    }
-    clipping_mode: CLIPPING_MODE_NONE
-    clipping_visible: true
-    clipping_inverted: false
-    alpha: 1.0
     overridden_fields: 1
     overridden_fields: 3
-    template_node_child: false
-    size_mode: SIZE_MODE_MANUAL
-    custom_type: 0
-    enabled: true
-    visible: true
-    material: ""
   }
 }
 layouts {
@@ -261,124 +100,56 @@ layouts {
     position {
       x: 358.0
       y: 816.0
-      z: 0.0
-      w: 1.0
-    }
-    rotation {
-      x: 0.0
-      y: 0.0
-      z: 0.0
-      w: 1.0
     }
     scale {
       x: 1.28
       y: 1.28
       z: 1.28
-      w: 1.0
     }
     size {
       x: 356.0
       y: 96.0
-      z: 0.0
-      w: 1.0
-    }
-    color {
-      x: 1.0
-      y: 1.0
-      z: 1.0
-      w: 1.0
     }
     type: TYPE_BOX
-    blend_mode: BLEND_MODE_ALPHA
-    texture: "assets/Title"
     id: "menuPanel"
-    xanchor: XANCHOR_NONE
-    yanchor: YANCHOR_NONE
-    pivot: PIVOT_CENTER
-    adjust_mode: ADJUST_MODE_FIT
-    layer: "background"
-    inherit_alpha: true
-    slice9 {
-      x: 0.0
-      y: 0.0
-      z: 0.0
-      w: 0.0
-    }
-    clipping_mode: CLIPPING_MODE_NONE
-    clipping_visible: true
-    clipping_inverted: false
-    alpha: 1.0
     overridden_fields: 1
     overridden_fields: 3
     overridden_fields: 4
-    template_node_child: false
-    size_mode: SIZE_MODE_MANUAL
-    custom_type: 0
-    enabled: true
-    visible: true
-    material: ""
   }
   nodes {
     position {
       x: 352.0
-      y: 223.0
-      z: 0.0
-      w: 1.0
-    }
-    rotation {
-      x: 0.0
-      y: 0.0
-      z: 0.0
-      w: 1.0
+      y: 312.0
     }
     scale {
-      x: 1.24
-      y: 1.24
-      z: 1.24
-      w: 1.0
+      x: 1.0664
+      y: 1.0664
+      z: 1.0664
     }
     size {
       x: 208.0
       y: 116.0
-      z: 0.0
-      w: 1.0
-    }
-    color {
-      x: 1.0
-      y: 1.0
-      z: 1.0
-      w: 1.0
     }
     type: TYPE_BOX
-    blend_mode: BLEND_MODE_ALPHA
-    texture: "assets/start_btn"
     id: "playBtn"
-    xanchor: XANCHOR_LEFT
-    yanchor: YANCHOR_TOP
-    pivot: PIVOT_CENTER
-    adjust_mode: ADJUST_MODE_ZOOM
-    layer: "menu"
-    inherit_alpha: true
-    slice9 {
-      x: 0.0
-      y: 0.0
-      z: 0.0
-      w: 0.0
-    }
-    clipping_mode: CLIPPING_MODE_NONE
-    clipping_visible: true
-    clipping_inverted: false
-    alpha: 1.0
     overridden_fields: 1
     overridden_fields: 3
     overridden_fields: 4
-    template_node_child: false
-    size_mode: SIZE_MODE_MANUAL
-    custom_type: 0
-    enabled: true
-    visible: true
-    material: ""
+  }
+  nodes {
+    position {
+      x: 354.0
+      y: 150.0
+    }
+    scale {
+      x: 1.8
+      y: 1.8
+      z: 1.8
+    }
+    type: TYPE_BOX
+    id: "exitBtn"
+    overridden_fields: 1
+    overridden_fields: 3
   }
 }
 adjust_reference: ADJUST_REFERENCE_PARENT
-max_nodes: 512

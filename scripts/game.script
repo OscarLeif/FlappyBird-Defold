@@ -87,7 +87,26 @@ local function camera_follow()
 end
 
 function on_input(self, action_id, action)
-	if action_id == hashes.INPUT_TOUCH and action.pressed then
+	local pressFlap = false
+	
+	if action_id == hash("dpad_center") and action.pressed then
+		print("DPAD_CENTER pressed")
+		-- Handle the DPAD_CENTER action here
+		pressFlap=true
+	end
+	
+	if action_id == hash("raw") then
+		pprint(action.gamepad_buttons)
+		pprint(action.gamepad_axis)
+		pprint(action.gamepad_hats)
+	end
+
+	
+	if action_id == hash("select") and action.pressed then
+		pressFlap=true
+	end
+	
+	if (action_id == hashes.INPUT_TOUCH and action.pressed) or pressFlap then
 		if state == STATES.ready then
 			state = STATES.playing
 			msg.post(player, "set_player_state", { state = 1 }) -- Assuming 1 is the alive state			
