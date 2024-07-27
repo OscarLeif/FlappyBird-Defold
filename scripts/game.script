@@ -86,6 +86,7 @@ local function camera_follow()
 	go.set_position(camera_pos, camera_go)
 end
 
+local flap_frame = false
 function on_input(self, action_id, action)
 	local pressFlap = false
 	local buttons = action.gamepad_buttons
@@ -108,9 +109,10 @@ function on_input(self, action_id, action)
 					pprint(action_id) --returns hash raw action
 				end
 
-				-- A Button 
+				-- A Button
 				if i == 1 and value == 1 then
 					pressFlap = true
+					
 				end
 			end
 		end
@@ -123,6 +125,7 @@ function on_input(self, action_id, action)
 
 	if (action_id == hashes.INPUT_TOUCH and action.pressed) or pressFlap then
 		if state == STATES.ready then
+			flap_frame=true
 			state = STATES.playing
 			msg.post(player, "set_player_state", { state = 1 }) -- Assuming 1 is the alive state			
 		else

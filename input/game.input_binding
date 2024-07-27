@@ -18,6 +18,10 @@ key_trigger {
   input: KEY_SPACE
   action: "select"
 }
+key_trigger {
+  input: KEY_ENTER
+  action: "select"
+}
 mouse_trigger {
   input: MOUSE_BUTTON_1
   action: "touch"

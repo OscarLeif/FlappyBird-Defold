@@ -148,25 +148,7 @@ function on_input(self, action_id, action)
 		local worldx, worldy = utils.screen_to_world(action.x, action.y, 0, w, h, projection, view)
 		local world = vmath.vector3(worldx, worldy, 0)
 		--go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, world, go.EASING_LINEAR, 0.5, 0, moved_to_position) -- <8>
-	end
-
-	if action_id == hash("+") and action.released then
-		--local current_fov = camera.get_fov(menu_camera)
-		--camera.set_fov(menu_camera, current_fov + 0.01)
-		--print("FOV: " .. camera.get_fov(menu_camera))
-		local ortho_zoom = menu_camera.get_orthographic_zoom(menu_camera) + 0.01
-		print("zoom apply: " .. ortho_zoom)
-		--camera.set_orthographic_zoom(menu_camera, ortho_zoom)--I think this doesnt work
-		go.set(menu_camera, "orthographic_zoom", ortho_zoom)
-	elseif action_id == hash("-") and action.released then
-		--local current_fov = camera.get_fov(menu_camera)
-		--camera.set_fov(menu_camera, current_fov - 0.01)
-		--print("FOV: " .. camera.get_fov(menu_camera))
-		local ortho_zoom = camera.get_orthographic_zoom(menu_camera) - 0.01
-		print("zoom apply: " .. ortho_zoom)
-		--camera.set_orthographic_zoom(menu_camera, ortho_zoom)--I think this doesnt work
-		go.set(menu_camera, "orthographic_zoom", ortho_zoom)
-	end
+	end	
 end
 
 function update(self, dt)

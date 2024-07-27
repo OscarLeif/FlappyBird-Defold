@@ -11,6 +11,7 @@ dynamic_orientation = 1
 display_device_info = 1
 
 [android]
+input_method = HiddenInputField
 display_cutout = 0
 immersive_mode = 1
 debuggable = 1
