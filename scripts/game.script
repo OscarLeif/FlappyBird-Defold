@@ -30,23 +30,23 @@ local icon_bottom_right
 
 local base_ground_go
 local ground_factory --factory of gameobjects
-local grounds = {} -- List to store ground segments
+local grounds = {}   -- List to store ground segments
 local grounds_scroll
 local ground_width
 local num_ground = 6
 
 local score = 0
-local game_gui 
+local game_gui
 local utils = require("utils.utils")
 
 function InitGrounds()
-		ground_width = go.get("ground#sprite", "size.x")
-		local base_pos = go.get_position("ground")
-		for i = 1, num_ground do
-			local ground_pos = vmath.vector3(base_pos.x + (i - 1) * ground_width, base_pos.y, base_pos.z)
-			local ground = factory.create(ground_factory, ground_pos)
-			table.insert(grounds, ground)
-		end
+	ground_width = go.get("ground#sprite", "size.x")
+	local base_pos = go.get_position("ground")
+	for i = 1, num_ground do
+		local ground_pos = vmath.vector3(base_pos.x + (i - 1) * ground_width, base_pos.y, base_pos.z)
+		local ground = factory.create(ground_factory, ground_pos)
+		table.insert(grounds, ground)
+	end
 end
 
 function init(self)
@@ -64,7 +64,7 @@ function init(self)
 	player = "player#bird"
 	ground_factory = "ground_scroller#factory"
 	pipe_factory = "pipe_factory#collection_factory"
-	base_ground_go = "ground_scroller/ground"--Ground game object
+	base_ground_go = "ground_scroller/ground" --Ground game object
 	self.spawnPos = vmath.vector3()
 	--game_gui = go.get("game_ui")--fails!!!
 
@@ -78,7 +78,6 @@ function init(self)
 	InitGrounds()
 end
 
-
 local function camera_follow()
 	local camera_pos = go.get_world_position(camera_go)
 	local player_pos = go.get_world_position(player_go)
@@ -89,24 +88,39 @@ end
 
 function on_input(self, action_id, action)
 	local pressFlap = false
-	
+	local buttons = action.gamepad_buttons
+
 	-- if action_id == hash("dpad_center") and action.pressed then
 	-- 	print("DPAD_CENTER pressed")
 	-- 	-- Handle the DPAD_CENTER action here
 	-- 	pressFlap=true
 	-- end
-	
+
 	if action_id == hash("raw") then
-		pprint(action.gamepad_buttons)
-		pprint(action.gamepad_axis)
-		pprint(action.gamepad_hats)
+		-- pprint(action.gamepad_buttons)
+		-- pprint(action.gamepad_axis)
+		-- pprint(action.gamepad_hats)
+		if buttons then
+			for i, value in pairs(buttons) do
+				if value == 1 then
+					print("Button pressed: " .. i)
+					pprint(buttons)
+					pprint(action_id) --returns hash raw action
+				end
+
+				-- A Button 
+				if i == 1 and value == 1 then
+					pressFlap = true
+				end
+			end
+		end
 	end
 
-	
+
 	if action_id == hash("select") and action.pressed then
-		pressFlap=true
+		pressFlap = true
 	end
-	
+
 	if (action_id == hashes.INPUT_TOUCH and action.pressed) or pressFlap then
 		if state == STATES.ready then
 			state = STATES.playing
@@ -208,43 +222,40 @@ function on_message(self, message_id, message, sender)
 		DISPLAY_WIDTH = message.width
 		DISPLAY_HEIGHT = message.height
 	end
-	
+
 	if (message_id == hashes.MESSAGE_GAME_OVER) then
 		state = STATES.game_over
 		print("game.script Game over")
-		msg.post("go#game_ui", "show")--one way to call
+		msg.post("go#game_ui", "show") --one way to call
 	end
 
-	if(message_id == hashes.MESSAGE_INCREASE_SCORE)then
-		score = score +1		
+	if (message_id == hashes.MESSAGE_INCREASE_SCORE) then
+		score = score + 1
 		msg.post("go#game_ui", hashes.MESSAGE_SET_SCORE, { score = score })
 	end
 
 	--we must send a message to increase the score	
-	
 end
 
-
 local function update_grounds()
-    for _, ground in ipairs(grounds) do
-        local ground_pos = go.get_position(ground)
-        --if ground_pos.x + ground_width < go.get_position(camera_go).x - 50 then
+	for _, ground in ipairs(grounds) do
+		local ground_pos = go.get_position(ground)
+		--if ground_pos.x + ground_width < go.get_position(camera_go).x - 50 then
 		if ground_pos.x + ground_width < world_points.bottom_left.x - 50 then
-            -- Reposition the ground segment to the right of the last ground segment
-            local last_ground = grounds[#grounds]
-            local last_ground_pos = go.get_position(last_ground)
-            ground_pos.x = last_ground_pos.x + ground_width
-            go.set_position(ground_pos, ground)
-            
-            -- Move the repositioned ground segment to the end of the list
-            table.remove(grounds, 1)
-            table.insert(grounds, ground)
-        end
-    end
+			-- Reposition the ground segment to the right of the last ground segment
+			local last_ground = grounds[#grounds]
+			local last_ground_pos = go.get_position(last_ground)
+			ground_pos.x = last_ground_pos.x + ground_width
+			go.set_position(ground_pos, ground)
+
+			-- Move the repositioned ground segment to the end of the list
+			table.remove(grounds, 1)
+			table.insert(grounds, ground)
+		end
+	end
 end
 
 function update(self, dt)
-	
 	get_camera_corner_points(game_camera)
 	adjust_camera_orthographic_zoom("area", game_camera)
 	update_grounds()
