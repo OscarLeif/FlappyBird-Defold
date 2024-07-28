@@ -20,6 +20,10 @@ local button_neighbors = {
 	[NODE_IDS.exit_button] = { left = NODE_IDS.play_button }
 }
 
+local labelText_buttons -- buttons
+local labeltext_axis
+local labeltext_hats
+
 local function OnClickStartGame()
 	msg.post("main:/main#main", "start_game")
 end
@@ -66,6 +70,9 @@ end
 function init(self)
 	nodes[NODE_IDS.play_button] = gui.get_node(NODE_IDS.play_button)
 	nodes[NODE_IDS.exit_button] = gui.get_node(NODE_IDS.exit_button)
+	labelText_buttons = gui.get_node("text")
+	labeltext_axis = gui.get_node("text1");
+	labeltext_hats = gui.get_node("text2");
 
 	msg.post(".", "acquire_input_focus")
 	anim.animateButton1(nodes[NODE_IDS.play_button], 0.4)
@@ -88,6 +95,16 @@ local raw_button_pressed = false
 local raw_axis_pressed = false
 local raw_axis_pressed_wait_frames = 0
 
+local prev_hat_state = 0
+
+local function table_to_string(tbl)
+    local result = ""
+    for key, value in pairs(tbl) do
+        result = result .. key .. ": " .. tostring(value) .. "\n"
+    end
+    return result
+end
+
 function on_input(self, action_id, action)
 	-- if action_id == hash("dpad_center") and action.pressed then
 	-- 	print("DPAD_CENTER pressed")
@@ -95,24 +112,54 @@ function on_input(self, action_id, action)
 
 	--Unlike Unity on_input is not called every frame
 	-- print("Input is called every frame ?")
-	if action_id == hash("connected") then
-		if action.gamepad_unknown then
-			print("The connected gamepad is unidentified and will only generate raw input")
-		else
-			print("The connected gamepad is known and will generate input actions for buttons and sticks")
-		end
-	end
 
-	if action_id == hash("raw") then
-		print("Buttons:")
-		pprint(action.gamepad_buttons)
+	-- if action_id == hash("connected") then
+	-- 	if action.gamepad_unknown then
+	-- 		print("The connected gamepad is unidentified and will only generate raw input")
+	-- 	else
+	-- 		print("The connected gamepad is known and will generate input actions for buttons and sticks")
+	-- 	end
+	-- end
 
-		print("Axes:")
-		pprint(action.gamepad_axis)
+	-- --I dont understand 
+	-- if action_id == hash("raw") then
+    --     local hats = action.gamepad_hats
+    --     if hats then
+    --         local current_hat_state = hats[1] -- Assuming the first hat switch
+    --         if current_hat_state ~= prev_hat_state then
+    --             if current_hat_state == 8 then
+    --                 navigate("left")
+    --             elseif current_hat_state == 2 then
+    --                 navigate("right")
+    --             elseif current_hat_state == 1 then
+    --                 navigate("up")
+    --             elseif current_hat_state == 4 then
+    --                 navigate("down")
+    --             end
+    --             prev_hat_state = current_hat_state
+    --         end
+    --     end
+	-- end
 
-		print("Hats:")
-		pprint(action.gamepad_hats)
-	end
+	-- --it was more easier to create labels to display this on the game itself...god
+	-- if action_id == hash("raw") then
+	-- 	print("Buttons:")
+	-- 	pprint(action.gamepad_buttons)
+
+	-- 	print("Axes:")
+	-- 	pprint(action.gamepad_axis)
+
+	-- 	print("Hats:")
+	-- 	pprint(action.gamepad_hats)
+
+	-- 	local combined_info = "Buttons:\n" .. table_to_string(action.gamepad_buttons) ..
+    --                       "\nAxes:\n" .. table_to_string(action.gamepad_axis) ..
+    --                       "\nHats:\n" .. table_to_string(action.gamepad_hats)
+
+	-- 	gui.set_text(labelText_buttons, table_to_string(action.gamepad_buttons))
+	-- 	gui.set_text(labeltext_axis, table_to_string(action.gamepad_axis))
+	-- 	gui.set_text(labeltext_hats, table_to_string(action.gamepad_hats))
+	-- end
 
 	-- if action_id == hash("raw") then
 	-- 	local buttons = action.gamepad_buttons
@@ -158,28 +205,27 @@ function on_input(self, action_id, action)
 	-- end
 
 	-- mapped gamepad, keyboard	
-	-- if action_id == hash("up") and action.pressed then
-	-- 	navigate("up")
-	-- elseif action_id == hash("down") and action.pressed then
-	-- 	navigate("down")
-	-- elseif action_id == hash("left") and action.pressed then
-	-- 	navigate("left")
-	-- elseif action_id == hash("right") and action.pressed then
-	-- 	navigate("right")
-	-- elseif action_id == hash("select") and action.pressed then
-	-- 	press_button()
-	-- end
+	if action_id == hash("up") and action.pressed then
+		navigate("up")
+	elseif action_id == hash("down") and action.pressed then
+		navigate("down")
+	elseif action_id == hash("left") and action.pressed then
+		navigate("left")
+	elseif action_id == hash("right") and action.pressed then
+		navigate("right")
+	elseif action_id == hash("select") and action.pressed then
+		press_button()
+	end
 
-	-- --handle touch and mouse click
-	-- if action.pressed and gui.pick_node(nodes[NODE_IDS.play_button], action.x, action.y) then
-	-- 	anim.animateButtonPress(nodes[NODE_IDS.play_button], 0.1)
-	-- end
+	--handle touch and mouse click
+	if action.pressed and gui.pick_node(nodes[NODE_IDS.play_button], action.x, action.y) then
+		anim.animateButtonPress(nodes[NODE_IDS.play_button], 0.1)
+	end
 
-	-- if action.released and gui.pick_node(nodes[NODE_IDS.play_button], action.x, action.y) then
-	-- 	anim.animateButtonRelease(nodes[NODE_IDS.play_button], 0.2)
-	-- 	OnClickStartGame()
-	-- end
-	--END handle touch and mouse click
+	if action.released and gui.pick_node(nodes[NODE_IDS.play_button], action.x, action.y) then
+		anim.animateButtonRelease(nodes[NODE_IDS.play_button], 0.2)
+		OnClickStartGame()
+	 end	
 end
 
 function update(self, dt)

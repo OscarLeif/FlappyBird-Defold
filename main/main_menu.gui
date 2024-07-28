@@ -1,4 +1,8 @@
 script: "/scripts/main_menu.gui_script"
+fonts {
+  name: "always_on_top"
+  font: "/builtins/fonts/debug/always_on_top.font"
+}
 textures {
   name: "assets"
   texture: "/Images/assets.atlas"
@@ -54,6 +58,46 @@ nodes {
   layer: "menu"
   inherit_alpha: true
 }
+nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "<text>"
+  id: "text"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 178.0
+    y: 355.0
+  }
+  size {
+    x: 300.0
+    y: 700.0
+  }
+  type: TYPE_TEXT
+  text: "<text>"
+  font: "always_on_top"
+  id: "text1"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 485.0
+    y: 355.0
+  }
+  size {
+    x: 300.0
+    y: 700.0
+  }
+  type: TYPE_TEXT
+  text: "<text>"
+  font: "always_on_top"
+  id: "text2"
+  inherit_alpha: true
+}
 layers {
   name: "background"
 }
@@ -104,6 +148,50 @@ layouts {
     }
     type: TYPE_BOX
     id: "exitBtn"
+    overridden_fields: 1
+    overridden_fields: 4
+  }
+  nodes {
+    position {
+      x: 89.0
+      y: 355.0
+    }
+    size {
+      x: 150.0
+      y: 700.0
+    }
+    type: TYPE_TEXT
+    font: "always_on_top"
+    id: "text"
+    overridden_fields: 1
+    overridden_fields: 4
+    overridden_fields: 10
+  }
+  nodes {
+    position {
+      x: 252.0
+      y: 355.0
+    }
+    size {
+      x: 150.0
+      y: 700.0
+    }
+    type: TYPE_TEXT
+    id: "text1"
+    overridden_fields: 1
+    overridden_fields: 4
+  }
+  nodes {
+    position {
+      x: 416.0
+      y: 355.0
+    }
+    size {
+      x: 150.0
+      y: 700.0
+    }
+    type: TYPE_TEXT
+    id: "text2"
     overridden_fields: 1
     overridden_fields: 4
   }
