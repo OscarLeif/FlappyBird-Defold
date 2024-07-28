@@ -99,26 +99,25 @@ function on_input(self, action_id, action)
 	-- 	pressFlap=true
 	-- end
 
-	if action_id == hash("raw") then
-		-- pprint(action.gamepad_buttons)
-		-- pprint(action.gamepad_axis)
-		-- pprint(action.gamepad_hats)
-		if buttons then
-			for i, value in pairs(buttons) do
-				if value == 1 then
-					print("Button pressed: " .. i)
-					pprint(buttons)
-					pprint(action_id) --returns hash raw action
-				end
+	-- if action_id == hash("raw") then
+	-- 	-- pprint(action.gamepad_buttons)
+	-- 	-- pprint(action.gamepad_axis)
+	-- 	-- pprint(action.gamepad_hats)
+	-- 	if buttons then
+	-- 		for i, value in pairs(buttons) do
+	-- 			if value == 1 then
+	-- 				print("Button pressed: " .. i)
+	-- 				pprint(buttons)
+	-- 				pprint(action_id) --returns hash raw action
+	-- 			end
 
-				-- A Button
-				if i == 1 and value == 1 then
-					pressFlap = true					
-				end
-			end
-		end
-	end
-
+	-- 			-- A Button
+	-- 			if i == 1 and value == 1 then
+	-- 				pressFlap = true					
+	-- 			end
+	-- 		end
+	-- 	end
+	-- end
 
 	if action_id == hash("select") and action.pressed then
 		pressFlap = true

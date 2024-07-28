@@ -5702,7 +5702,7 @@ driver {
 }
 driver {
   device: "Wireless Controller"
-  platform: "windows"
+  platform: "android"
   dead_zone: 0.2
   map {
     input: GAMEPAD_LSTICK_LEFT

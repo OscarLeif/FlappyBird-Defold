@@ -62,3 +62,19 @@ gamepad_trigger {
   input: GAMEPAD_LPAD_UP
   action: "up"
 }
+gamepad_trigger {
+  input: GAMEPAD_LSTICK_DOWN
+  action: "down"
+}
+gamepad_trigger {
+  input: GAMEPAD_LSTICK_LEFT
+  action: "left"
+}
+gamepad_trigger {
+  input: GAMEPAD_LSTICK_RIGHT
+  action: "right"
+}
+gamepad_trigger {
+  input: GAMEPAD_LSTICK_UP
+  action: "up"
+}

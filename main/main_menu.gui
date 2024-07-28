@@ -46,7 +46,7 @@ nodes {
     y: 58.0
   }
   type: TYPE_BOX
-  texture: "assets/start_btn"
+  texture: "assets/leaderboard_btn"
   id: "exitBtn"
   xanchor: XANCHOR_LEFT
   yanchor: YANCHOR_TOP

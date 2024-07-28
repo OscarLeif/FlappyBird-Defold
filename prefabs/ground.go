@@ -45,7 +45,7 @@ embedded_components {
   "}\n"
   ""
   position {
-    y: -84.0
+    y: -88.0
     z: -0.5
   }
 }

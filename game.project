@@ -21,6 +21,7 @@ extract_native_libs = 1
 title = Flappy Bird Defold
 developer = Oscar Leif
 write_log = 1
+dependencies = 
 
 [input]
 game_binding = /input/game.input_bindingc

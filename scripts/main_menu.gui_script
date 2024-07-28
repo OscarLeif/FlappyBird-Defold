@@ -95,6 +95,24 @@ function on_input(self, action_id, action)
 
 	--Unlike Unity on_input is not called every frame
 	-- print("Input is called every frame ?")
+	if action_id == hash("connected") then
+		if action.gamepad_unknown then
+			print("The connected gamepad is unidentified and will only generate raw input")
+		else
+			print("The connected gamepad is known and will generate input actions for buttons and sticks")
+		end
+	end
+
+	if action_id == hash("raw") then
+		print("Buttons:")
+		pprint(action.gamepad_buttons)
+
+		print("Axes:")
+		pprint(action.gamepad_axis)
+
+		print("Hats:")
+		pprint(action.gamepad_hats)
+	end
 
 	-- if action_id == hash("raw") then
 	-- 	local buttons = action.gamepad_buttons
@@ -139,28 +157,29 @@ function on_input(self, action_id, action)
 	-- 	end
 	-- end
 
-	-- mapped gamepad, keyboard
-	if action_id == hash("up") and action.pressed then
-		navigate("up")
-	elseif action_id == hash("down") and action.pressed then
-		navigate("down")
-	elseif action_id == hash("left") and action.pressed then
-		navigate("left")
-	elseif action_id == hash("right") and action.pressed then
-		navigate("right")
-	elseif action_id == hash("select") and action.pressed then
-		press_button()
-	end
+	-- mapped gamepad, keyboard	
+	-- if action_id == hash("up") and action.pressed then
+	-- 	navigate("up")
+	-- elseif action_id == hash("down") and action.pressed then
+	-- 	navigate("down")
+	-- elseif action_id == hash("left") and action.pressed then
+	-- 	navigate("left")
+	-- elseif action_id == hash("right") and action.pressed then
+	-- 	navigate("right")
+	-- elseif action_id == hash("select") and action.pressed then
+	-- 	press_button()
+	-- end
 
-	--touch
-	if action.pressed and gui.pick_node(nodes[NODE_IDS.play_button], action.x, action.y) then
-		anim.animateButtonPress(nodes[NODE_IDS.play_button], 0.1)
-	end
+	-- --handle touch and mouse click
+	-- if action.pressed and gui.pick_node(nodes[NODE_IDS.play_button], action.x, action.y) then
+	-- 	anim.animateButtonPress(nodes[NODE_IDS.play_button], 0.1)
+	-- end
 
-	if action.released and gui.pick_node(nodes[NODE_IDS.play_button], action.x, action.y) then
-		anim.animateButtonRelease(nodes[NODE_IDS.play_button], 0.2)
-		OnClickStartGame()
-	end
+	-- if action.released and gui.pick_node(nodes[NODE_IDS.play_button], action.x, action.y) then
+	-- 	anim.animateButtonRelease(nodes[NODE_IDS.play_button], 0.2)
+	-- 	OnClickStartGame()
+	-- end
+	--END handle touch and mouse click
 end
 
 function update(self, dt)
