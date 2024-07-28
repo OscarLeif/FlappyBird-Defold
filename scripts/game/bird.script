@@ -13,6 +13,8 @@ local time = 0
 local lume = require("utils.lume")
 local hashes = require("utils.hashes")
 
+local sound_url = ""
+
 function init(self)
 	self.position = go.get_position(".")
 	self.velocity = vmath.vector3()
@@ -62,7 +64,9 @@ end
 
 local function click(self)
 	self.velocity.y = FLAPP_SPEED
-	print("flapp")
+	-- Very confused with the sounds url. Hope we can later drop url via drag and drop
+	msg.post("/sounds#flap", hashes.MESSAGE_PLAY_SOUND)
+	print("flapp") --when sound works clean me
 end
 
 function on_message(self, message_id, message, sender)
@@ -88,6 +92,7 @@ function on_message(self, message_id, message, sender)
 		elseif (message_id == hashes.PHYSICS_MESSAGE_TRIGGER and message.enter) then
 			print("Increase score")
 			msg.post("game:/go#game", hashes.MESSAGE_INCREASE_SCORE)
+			msg.post("/sounds#coin", hashes.MESSAGE_PLAY_SOUND)
 		end
 	elseif player_state == BIRD_STATE.dead then
 		if (message.group == hashes.DIRT) then

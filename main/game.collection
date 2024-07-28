@@ -10,6 +10,7 @@ embedded_instances {
   children: "icon_top_right"
   children: "pipe_factory"
   children: "player"
+  children: "sounds"
   data: "components {\n"
   "  id: \"game\"\n"
   "  component: \"/scripts/game.script\"\n"
@@ -51,6 +52,9 @@ embedded_instances {
   "\"\n"
   "}\n"
   ""
+  position {
+    z: 2.0
+  }
 }
 embedded_instances {
   id: "ground"
@@ -331,6 +335,34 @@ embedded_instances {
   "    y: 0.15\n"
   "    z: 0.15\n"
   "  }\n"
+  "}\n"
+  ""
+}
+embedded_instances {
+  id: "sounds"
+  data: "embedded_components {\n"
+  "  id: \"coin\"\n"
+  "  type: \"sound\"\n"
+  "  data: \"sound: \\\"/Sounds/point.ogg\\\"\\n"
+  "\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"dead\"\n"
+  "  type: \"sound\"\n"
+  "  data: \"sound: \\\"/Sounds/die.ogg\\\"\\n"
+  "\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"flap\"\n"
+  "  type: \"sound\"\n"
+  "  data: \"sound: \\\"/Sounds/wing.ogg\\\"\\n"
+  "\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"hit\"\n"
+  "  type: \"sound\"\n"
+  "  data: \"sound: \\\"/Sounds/hit.ogg\\\"\\n"
+  "\"\n"
   "}\n"
   ""
 }

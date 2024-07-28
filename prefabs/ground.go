@@ -34,3 +34,18 @@ embedded_components {
   "}\n"
   ""
 }
+embedded_components {
+  id: "sprite1"
+  type: "sprite"
+  data: "default_animation: \"base\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/Images/assets.atlas\"\n"
+  "}\n"
+  ""
+  position {
+    y: -84.0
+    z: -0.5
+  }
+}

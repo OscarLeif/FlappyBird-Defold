@@ -2,6 +2,8 @@
 	Game have 3 states idle, play, gameover
 --]]
 local hashes = require("utils.hashes") --see the file Utils/hashes.script
+--local timer = require "timer"
+
 local STATES = { ready = 0, game = 1, game_over = 2 }
 
 local state            -- Like enum state
@@ -43,7 +45,7 @@ function InitGrounds()
 	ground_width = go.get("ground#sprite", "size.x")
 	local base_pos = go.get_position("ground")
 	for i = 1, num_ground do
-		local ground_pos = vmath.vector3(base_pos.x + (i - 1) * ground_width, base_pos.y, base_pos.z)
+		local ground_pos = vmath.vector3(base_pos.x + (i - 1) * ground_width, base_pos.y, 1)
 		local ground = factory.create(ground_factory, ground_pos)
 		table.insert(grounds, ground)
 	end
@@ -111,8 +113,7 @@ function on_input(self, action_id, action)
 
 				-- A Button
 				if i == 1 and value == 1 then
-					pressFlap = true
-					
+					pressFlap = true					
 				end
 			end
 		end
@@ -149,6 +150,7 @@ local function spawn_pipe()
 	--print ("top right " .. world_points.top_right .. "bottom right " .. world_points.bottom_right)
 	local spawn_pos = (world_points.top_right + world_points.bottom_right) / 2
 	spawn_pos.x = spawn_pos.x + 52 -- + the pipe width
+	spawn_pos.z = -1
 	--local spawn_pos = vmath.vector3(next_spawn_x, player_pos.y, 0)
 	local pipe = collectionfactory.create(pipe_factory, spawn_pos)
 	table.insert(pipes, pipe)
@@ -220,6 +222,8 @@ local function get_camera_corner_points(camera)
 	--print("Bottom Right: ", world_points.bottom_right)
 end
 
+local HIT_SOUND_DURATION = 0.25
+
 function on_message(self, message_id, message, sender)
 	if message_id == hash("window_resized") then
 		DISPLAY_WIDTH = message.width
@@ -229,7 +233,17 @@ function on_message(self, message_id, message, sender)
 	if (message_id == hashes.MESSAGE_GAME_OVER) then
 		state = STATES.game_over
 		print("game.script Game over")
-		msg.post("go#game_ui", "show") --one way to call
+		
+		-- Play the hit sound immediately
+		msg.post("/sounds#hit", hashes.MESSAGE_PLAY_SOUND)
+		
+		-- Schedule the dead sound to play after the hit sound duration
+		timer.delay(HIT_SOUND_DURATION, false, function()
+			msg.post("/sounds#dead", hashes.MESSAGE_PLAY_SOUND)
+		end)
+	
+		-- Send message to the game_ui
+		msg.post("go#game_ui", "show")
 	end
 
 	if (message_id == hashes.MESSAGE_INCREASE_SCORE) then

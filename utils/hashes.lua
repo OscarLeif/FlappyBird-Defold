@@ -13,6 +13,8 @@ M.MESSAGE_SET_SCORE=hash("set_score")
 M.MESSAGE_INCREASE_SCORE=hash("increase_score")
 M.MESSAGE_GAME_OVER=hash("game_over")
 
+M.MESSAGE_PLAY_SOUND=hash("play_sound")
+
 M.SCORE = hash("score")
 M.DIRT = hash("dirt")
 return M
