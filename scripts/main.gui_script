@@ -1,6 +1,7 @@
 -- main.gui_script
 
 local black_box
+local fade_time = 0.25
 
 function init(self)
     -- Get the black box node
@@ -24,19 +25,21 @@ function resize_and_center_black_box()
     gui.set_position(black_box, vmath.vector3(screen_width / 2, screen_height / 2, -1))
 end
 
-function fade_in(self, start_color, end_color, duration)
+function fade_in(self, start_color, end_color, duration, callback)
     gui.set_enabled(black_box, true)
     gui.set_color(black_box, start_color)
     gui.animate(black_box, "color", end_color, gui.EASING_LINEAR, duration, 0, function()
         gui.set_enabled(black_box, true)
+        if callback then callback() end
     end)
 end
 
-function fade_out(self, start_color, end_color, duration)
+function fade_out(self, start_color, end_color, duration, callback)
     gui.set_enabled(black_box, true)
     gui.set_color(black_box, start_color)
     gui.animate(black_box, "color", end_color, gui.EASING_LINEAR, duration, 0, function()
         gui.set_enabled(black_box, false)
+        if callback then callback() end
     end)
 end
 
@@ -46,9 +49,13 @@ end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("fade_in") then
-        fade_in(self, vmath.vector4(0, 0, 0, 0), vmath.vector4(0, 0, 0, 1), 1.0)
+        fade_in(self, vmath.vector4(0, 0, 0, 0), vmath.vector4(0, 0, 0, 1), fade_time, function()
+            msg.post(sender, "fade_in_complete")
+        end)
     elseif message_id == hash("fade_out") then
-        fade_out(self, vmath.vector4(0, 0, 0, 1), vmath.vector4(0, 0, 0, 0), 1.0)
+        fade_out(self, vmath.vector4(0, 0, 0, 1), vmath.vector4(0, 0, 0, 0), fade_time, function()
+            msg.post(sender, "fade_out_complete")
+        end)
     elseif message_id == hash("window_resized") then
         resize_and_center_black_box()
     end
