@@ -65,6 +65,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "<text>"
+  font: "always_on_top"
   id: "text"
   inherit_alpha: true
 }
@@ -103,6 +104,9 @@ layers {
 }
 layers {
   name: "menu"
+}
+layers {
+  name: "TRANSITION"
 }
 material: "/builtins/materials/gui.material"
 layouts {

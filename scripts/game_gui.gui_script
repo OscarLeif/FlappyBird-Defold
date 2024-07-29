@@ -1,5 +1,6 @@
 local hashes = require("utils.hashes")
 
+
 local focus_index = 1
 local focus_scale = vmath.vector3(1.2, 1.2, 1)
 local default_scale = vmath.vector3(1, 1, 1)
@@ -22,12 +23,12 @@ local read_input = false
 
 local function OnClickRestartGame()
     print("Ok Restart the Game")
-    msg.post("main:/main#main", "restart_game")
+    msg.post("main_collection:/main#main", "restart_game")
 end
 
 local function OnClickMainMenu()
     print("Ok Now return to the main menu")
-    msg.post("main:/main#main", "start_main_menu")
+    msg.post("main_collection:/main#main", "start_main_menu")
 end
 
 local function focus_button(button_id)

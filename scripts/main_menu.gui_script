@@ -25,7 +25,7 @@ local labeltext_axis
 local labeltext_hats
 
 local function OnClickStartGame()
-	msg.post("main:/main#main", "start_game")
+	msg.post("main_collection:/main#main", "start_game")
 end
 
 local function OnClickExitGame()

@@ -1,87 +1,89 @@
 local next_world_load
 
 local main_menu_proxy     = "#main_menu_proxy"
-local main_menu_proxy_url = msg.url("main:/main#main_menu_proxy")
+local main_menu_proxy_url = msg.url("main_collection:/main#main_menu_proxy")
 
+local game_proxy_url      = msg.url("main_collection:/main#game_proxy") --URL
+local game_proxy          = "#game_proxy"
 
-local game_proxy_url = msg.url("main:/main#game_proxy")          --URL
-local game_proxy     = "#game_proxy"
+local transition_url      = msg.url("main_collection:/transition")
 
 -- Define constants for game states
-local STATES = {
-	MAIN_MENU = "MAIN_MENU",
-	GAME = "GAME",
-	GAME_OVER = "GAME_OVER"
+local STATES              = {
+    MAIN_MENU = "MAIN_MENU",
+    GAME = "GAME",
+    GAME_OVER = "GAME_OVER"
 }
 
 function init(self)
-	print("main.script file init")
-	msg.post(".", "init")
-	self.state = STATES.MAIN_MENU
+    print("main.script file init")
+    msg.post(".", "init")
+    self.state = STATES.MAIN_MENU
 end
 
 function on_message(self, message_id, message, sender)
-	if (message_id == hash("init")) then
-		self.state = STATES.MAIN_MENU
-		print("main.script load main_menu_proxy")
-		--msg.post("#main_menu_proxy", "load") --works
-		--msg.post(main_menu_proxy, "load") --works
-		msg.post(main_menu_proxy_url, "load") --works
-	end
+    if (message_id == hash("init")) then
+        self.state = STATES.MAIN_MENU
+        print("main.script load main_menu_proxy")
+        --msg.post("#main_menu_proxy", "load") --works
+        --msg.post(main_menu_proxy, "load") --works
+        msg.post(transition_url, "fade_out")
+        msg.post(main_menu_proxy_url, "load") --works
+    end
 
-	--Called From Game Scene
-	if (message_id == hash("start_main_menu")) then
-		msg.post("#game_proxy", "unload")
-		if self.state ~= STATES.MAIN_MENU then
-			if self.state == STATES.GAME then
-				--msg.post("#game_proxy", "unload")
-				self.state =STATES.MAIN_MENU
-				msg.post(game_proxy_url, "unload")
-				msg.post(main_menu_proxy_url, "enable")
-				msg.post(main_menu_proxy_url, "acquire_input_focus")								
-				
-			end
-		end		
-	end
+    --Called From Game Scene
+    if (message_id == hash("start_main_menu")) then
+        msg.post("#game_proxy", "unload")
+        if self.state ~= STATES.MAIN_MENU then
+            if self.state == STATES.GAME then
+                --msg.post("#game_proxy", "unload")
+                self.state = STATES.MAIN_MENU
+                msg.post(game_proxy_url, "unload")
+                msg.post(main_menu_proxy_url, "enable")
+                msg.post(main_menu_proxy_url, "acquire_input_focus")
+            end
+        end
+    end
 
-	--Called from the game_proxy itself to reload the game
-	if (message_id == hash("start_game")) then
-		if self.state == STATES.MAIN_MENU then
-			msg.post("#main_menu_proxy", "disable")
-			msg.post("#game_proxy", "load")
-			self.state = STATES.GAME
-		end
-	end
+    --Called from the game_proxy itself to reload the game
+    if (message_id == hash("start_game")) then
+        if self.state == STATES.MAIN_MENU then
+            msg.post(main_menu_proxy_url, "disable")
+            -- msg.post("#game_proxy", "load")
+            msg.post(game_proxy_url, "load")
+            self.state = STATES.GAME
+        end
+    end
 
-	--restart the game
-	if (message_id == hash("restart_game")) then
-		if self.state == STATES.GAME then
-			msg.post("#game_proxy", "unload")
-		end
-	end
+    --restart the game
+    if (message_id == hash("restart_game")) then
+        if self.state == STATES.GAME then
+            msg.post(game_proxy_url, "unload")
+        end
+    end
 
-	---Proxy callbacks
-	if (message_id == hash("proxy_loaded")) then
-		print("proxy loaded")
-		print(sender) --This returns an URL
+    ---Proxy callbacks
+    if (message_id == hash("proxy_loaded")) then
+        print("proxy loaded")
+        print(sender) --This returns an URL
 
-		if (sender == msg.url("#main_menu_proxy")) then
-			msg.post(sender, "enable")
-			msg.post(sender, "acquire_input_focus")
-		end
+        if (sender == msg.url("#main_menu_proxy")) then
+            msg.post(sender, "enable")
+            msg.post(sender, "acquire_input_focus")
+        end
 
-		if (sender == msg.url("#game_proxy")) then
-			msg.post(sender, "enable")
-			msg.post(sender, "acquire_input_focus")
-			self.state = STATES.GAME
-		end
-	end
+        if (sender == msg.url("#game_proxy")) then
+            msg.post(sender, "enable")
+            msg.post(sender, "acquire_input_focus")
+            self.state = STATES.GAME
+        end
+    end
 
-	--thing is 
-	if (message_id == hash("proxy_unloaded") )then
-		if (self.state == STATES.GAME) then
-			print("reload the game")
-			msg.post("#game_proxy", "load")
-		end
-	end
+    --thing is
+    if (message_id == hash("proxy_unloaded")) then
+        if (self.state == STATES.GAME) then
+            print("reload the game")
+            msg.post(game_proxy_url, "load")
+        end
+    end
 end

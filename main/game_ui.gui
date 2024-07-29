@@ -79,6 +79,9 @@ layers {
 layers {
   name: "GAME_OVER"
 }
+layers {
+  name: "TRANSITION"
+}
 material: "/builtins/materials/gui.material"
 layouts {
   name: "Landscape"
