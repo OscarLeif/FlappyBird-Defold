@@ -1,51 +1,55 @@
---main.gui_script
+-- main.gui_script
 
 local black_box
 
 function init(self)
-	-- Get the black box node
-	black_box = gui.get_node("box")
-	local screen_width, screen_height = window.get_size()
-	gui.set_size_mode(black_box, gui.SIZE_MODE_MANUAL)
-	--gui.set_enabled(black_box, false)
+    -- Get the black box node
+    black_box = gui.get_node("box")
+    local screen_width, screen_height = window.get_size()
+    gui.set_size_mode(black_box, gui.SIZE_MODE_MANUAL)
+    gui.set_enabled(black_box, false)
 
-	-- Ensure the black box covers the entire screen
-	resize_and_center_black_box()
+    -- Ensure the black box covers the entire screen
+    resize_and_center_black_box()
 end
 
 function resize_and_center_black_box()
-	-- Get the screen dimensions
-	--local screen_width = tonumber(sys.get_config("display.width"))
-	--local screen_height = tonumber(sys.get_config("display.height"))
-	local screen_width, screen_height = window.get_size()
+    -- Get the screen dimensions
+    local screen_width, screen_height = window.get_size()
 
-	-- Set the size of the black box to match the screen dimensions
-	gui.set_size(black_box, vmath.vector3(screen_width, screen_height, 0))
+    -- Set the size of the black box to match the screen dimensions
+    gui.set_size(black_box, vmath.vector3(screen_width, screen_height, 0))
 
-	-- Center the black box in the screen
-	gui.set_position(black_box, vmath.vector3(screen_width / 2, screen_height / 2, -1))
+    -- Center the black box in the screen
+    gui.set_position(black_box, vmath.vector3(screen_width / 2, screen_height / 2, -1))
 end
 
-function fade_in(self)
-	gui.set_color(black_box, vmath.vector4(0, 0, 0, 0))       -- Set to transparent
-	gui.animate(black_box, "color.w", 1, gui.EASING_LINEAR, 1.0) -- Fade to black over 1 second
+function fade_in(self, start_color, end_color, duration)
+    gui.set_enabled(black_box, true)
+    gui.set_color(black_box, start_color)
+    gui.animate(black_box, "color", end_color, gui.EASING_LINEAR, duration, 0, function()
+        gui.set_enabled(black_box, true)
+    end)
 end
 
-function fade_out(self)
-	gui.set_color(black_box, vmath.vector4(0, 0, 0, 1))       -- Set to black
-	gui.animate(black_box, "color.w", 0, gui.EASING_LINEAR, 1.0) -- Fade to transparent over 1 second
+function fade_out(self, start_color, end_color, duration)
+    gui.set_enabled(black_box, true)
+    gui.set_color(black_box, start_color)
+    gui.animate(black_box, "color", end_color, gui.EASING_LINEAR, duration, 0, function()
+        gui.set_enabled(black_box, false)
+    end)
 end
 
 function update(self, dt)
-	gui.set_render_order(15)
+    gui.set_render_order(15)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("fade_in") then
-		fade_in(self)
-	elseif message_id == hash("fade_out") then
-		fade_out(self)
-	elseif message_id == hash("window_resized") then
-		resize_and_center_black_box()
-	end
+    if message_id == hash("fade_in") then
+        fade_in(self, vmath.vector4(0, 0, 0, 0), vmath.vector4(0, 0, 0, 1), 1.0)
+    elseif message_id == hash("fade_out") then
+        fade_out(self, vmath.vector4(0, 0, 0, 1), vmath.vector4(0, 0, 0, 0), 1.0)
+    elseif message_id == hash("window_resized") then
+        resize_and_center_black_box()
+    end
 end
