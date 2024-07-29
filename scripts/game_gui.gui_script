@@ -21,14 +21,17 @@ local button_neighbors = {
 local nodes = {}
 local read_input = false
 
+local main_collection_url = "main_collection:/main#main"
+
+--works as expected. we can restart the game with fade in out effetc
 local function OnClickRestartGame()
     print("Ok Restart the Game")
-    msg.post("main_collection:/main#main", "restart_game")
+    msg.post(main_collection_url, "restart_game")
 end
 
 local function OnClickMainMenu()
     print("Ok Now return to the main menu")
-    msg.post("main_collection:/main#main", "start_main_menu")
+    msg.post(main_collection_url, "start_main_menu")
 end
 
 local function focus_button(button_id)
