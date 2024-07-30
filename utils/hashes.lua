@@ -7,8 +7,8 @@ M.INPUT_FOCUS_RELEASE       = hash("release_input_focus")
 M.INPUT_TOUCH               = hash("touch")
 M.LOAD                      = hash("load")           -- load a proxy
 M.UNLOAD                    = hash("unload")         -- unload proxy
-M.PROXY_LOADED              = hash("proxy_loaded")   --trigger event when a proxy load
-M.PROXY_UNLOADED            = hash("proxy_unloaded") --trigger event when a proxy unload
+M.PROXY_LOADED              = hash("proxy_loaded")   --trigger event message when a proxy load
+M.PROXY_UNLOADED            = hash("proxy_unloaded") --trigger event message when a proxy unload
 M.ENABLE                    = hash("enable")
 M.DISABLE                   = hash("disable")
 
