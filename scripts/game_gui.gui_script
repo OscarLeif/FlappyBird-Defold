@@ -9,7 +9,8 @@ local NODE_IDS = {
     game_over_title = "game_over_title",
     play_button = "playBtn",
     exit_button = "exitBtn",
-    label_score = "label_score"
+    label_score = "label_score",
+    flash_box = "flash_box"
 }
 
 local buttons = { NODE_IDS.play_button, NODE_IDS.exit_button }
@@ -79,10 +80,46 @@ function init(self)
     nodes[NODE_IDS.play_button] = gui.get_node(NODE_IDS.play_button)
     nodes[NODE_IDS.exit_button] = gui.get_node(NODE_IDS.exit_button)
     nodes[NODE_IDS.label_score] = gui.get_node(NODE_IDS.label_score)
+    nodes[NODE_IDS.flash_box] = gui.get_node(NODE_IDS.flash_box)
 
     gui.set_enabled(nodes[NODE_IDS.game_over_title], false)
     gui.set_enabled(nodes[NODE_IDS.play_button], false)
     gui.set_enabled(nodes[NODE_IDS.exit_button], false)
+
+    --the flash box must cover the whole screen
+    gui.set_enabled(nodes[NODE_IDS.flash_box], false)
+    resize_and_center_black_box()
+end
+
+function create_flash_effect()
+    -- Enable the flash box and set its initial alpha to 0
+    gui.set_enabled(nodes[NODE_IDS.flash_box], true)
+    resize_and_center_black_box()
+    gui.set_color(nodes[NODE_IDS.flash_box], vmath.vector4(1, 1, 1, 0))
+
+    -- Animate the alpha value to create the flash effect
+    gui.animate(nodes[NODE_IDS.flash_box], gui.PROP_COLOR, vmath.vector4(1, 1, 1, 1), gui.EASING_LINEAR, 0.1, 0,
+        function()
+            gui.animate(nodes[NODE_IDS.flash_box], gui.PROP_COLOR, vmath.vector4(1, 1, 1, 0), gui.EASING_LINEAR, 0.1, 0.1,
+                function()
+                    -- Disable the flash box after the animation
+                    gui.set_enabled(nodes[NODE_IDS.flash_box], false)
+                end)
+        end)
+end
+
+function resize_and_center_black_box()
+    -- Get the screen dimensions
+    local screen_width, screen_height = window.get_size()
+    --I forgot this.
+    gui.set_size_mode(gui.get_node(NODE_IDS.flash_box), gui.SIZE_MODE_MANUAL)
+
+    -- Set the size of the black box to match the screen dimensions --something is not working correctly here.
+    gui.set_size(gui.get_node(NODE_IDS.flash_box), vmath.vector3(screen_width*4, screen_height*4, 0))
+
+    -- Center the black box in the screen
+    gui.set_position(gui.get_node(NODE_IDS.flash_box), vmath.vector3(screen_width / 2, screen_height / 2, -1))
+    print("Flash Box Resize w:" .. screen_width .. " h:" .. screen_height)
 end
 
 function on_input(self, action_id, action)
@@ -121,6 +158,7 @@ function on_message(self, message_id, message, sender)
     end
 
     if message_id == hash("show") then
+        create_flash_effect()
         timer.delay(2, false, function()
             print("Show the game over UI...read input must be true")
             msg.post(".", "acquire_input_focus")
@@ -130,5 +168,9 @@ function on_message(self, message_id, message, sender)
             gui.set_enabled(nodes[NODE_IDS.exit_button], true)
             read_input = true
         end)
+    end
+
+    if message_id == hash("window_resized") then
+        resize_and_center_black_box()
     end
 end

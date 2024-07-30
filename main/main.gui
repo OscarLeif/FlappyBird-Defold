@@ -24,7 +24,6 @@ nodes {
   adjust_mode: ADJUST_MODE_ZOOM
   layer: "TRANSITION"
   inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
 }
 layers {
   name: "TRANSITION"

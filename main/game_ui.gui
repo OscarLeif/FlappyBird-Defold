@@ -73,6 +73,20 @@ nodes {
   adjust_mode: ADJUST_MODE_ZOOM
   inherit_alpha: true
 }
+nodes {
+  position {
+    x: 144.0
+    y: 256.0
+  }
+  size {
+    x: 288.0
+    y: 512.0
+  }
+  type: TYPE_BOX
+  id: "flash_box"
+  layer: "TRANSITION"
+  inherit_alpha: true
+}
 layers {
   name: "HUD"
 }
