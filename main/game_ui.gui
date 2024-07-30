@@ -86,6 +86,28 @@ nodes {
   id: "flash_box"
   layer: "TRANSITION"
   inherit_alpha: true
+  enabled: false
+}
+nodes {
+  position {
+    x: 215.8374
+    y: 305.02704
+  }
+  scale {
+    x: 0.42
+    y: 0.42
+    z: 0.42
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "main"
+  id: "label_best_score"
+  adjust_mode: ADJUST_MODE_ZOOM
+  inherit_alpha: true
 }
 layers {
   name: "HUD"
@@ -152,6 +174,15 @@ layouts {
     id: "label_score"
     overridden_fields: 1
   }
+  nodes {
+    position {
+      x: 770.45233
+      y: 370.74765
+    }
+    type: TYPE_TEXT
+    id: "label_best_score"
+    overridden_fields: 1
+  }
 }
 layouts {
   name: "Portrait"
@@ -211,6 +242,21 @@ layouts {
     id: "label_score"
     overridden_fields: 1
     overridden_fields: 8
+  }
+  nodes {
+    position {
+      x: 504.7867
+      y: 716.25165
+    }
+    scale {
+      x: 1.2096
+      y: 1.2096
+      z: 1.2096
+    }
+    type: TYPE_TEXT
+    id: "label_best_score"
+    overridden_fields: 1
+    overridden_fields: 3
   }
 }
 adjust_reference: ADJUST_REFERENCE_PARENT

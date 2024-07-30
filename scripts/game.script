@@ -240,8 +240,14 @@ function on_message(self, message_id, message, sender)
 		timer.delay(HIT_SOUND_DURATION, false, function()
 			msg.post("/sounds#dead", hashes.MESSAGE_PLAY_SOUND)
 		end)
-	
+
+		local best_score = utils.load_best_score()
 		-- Send message to the game_ui
+		if score > best_score then
+			utils.save_best_score(score)
+			print("New best score saved:", score)
+		end
+
 		msg.post("go#game_ui", "show")
 	end
 

@@ -22,7 +22,7 @@ function utils.screen_to_world(sx, sy, sz, window_width, window_height, projecti
     return wx, wy, wz
 end
 
---not sure if it's expensive to get the window width and height every time this is called
+-- Not sure if it's expensive to get the window width and height every time this is called
 function utils.screen_to_world_with_camera(sx, sy, sz, window_width, window_height, camera)
     local projection = go.get(camera, "projection")
     local view = go.get(camera, "view")
@@ -54,6 +54,23 @@ function utils.get_camera_corner_points(camera)
     }
 
     return world_points
+end
+
+-- Add the save and load functions for best score
+function utils.save_best_score(score)
+    local data = {
+        best_score = score
+    }
+    sys.save(sys.get_save_file("my_unique_game_id", "save_data"), data)
+end
+
+function utils.load_best_score()
+    local data = sys.load(sys.get_save_file("my_unique_game_id", "save_data"))
+    if data and data.best_score then
+        return data.best_score
+    else
+        return 0 -- default value if there's no saved data
+    end
 end
 
 return utils

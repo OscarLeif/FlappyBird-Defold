@@ -1,5 +1,5 @@
 local hashes = require("utils.hashes")
-
+local utils = require("utils.utils")
 
 local focus_index = 1
 local focus_scale = vmath.vector3(1.2, 1.2, 1)
@@ -10,7 +10,8 @@ local NODE_IDS = {
     play_button = "playBtn",
     exit_button = "exitBtn",
     label_score = "label_score",
-    flash_box = "flash_box"
+    flash_box = "flash_box",
+    label_best_score = "label_best_score"
 }
 
 local buttons = { NODE_IDS.play_button, NODE_IDS.exit_button }
@@ -81,10 +82,12 @@ function init(self)
     nodes[NODE_IDS.exit_button] = gui.get_node(NODE_IDS.exit_button)
     nodes[NODE_IDS.label_score] = gui.get_node(NODE_IDS.label_score)
     nodes[NODE_IDS.flash_box] = gui.get_node(NODE_IDS.flash_box)
+    nodes[NODE_IDS.label_best_score] = gui.get_node(NODE_IDS.label_best_score)
 
     gui.set_enabled(nodes[NODE_IDS.game_over_title], false)
     gui.set_enabled(nodes[NODE_IDS.play_button], false)
     gui.set_enabled(nodes[NODE_IDS.exit_button], false)
+    gui.set_enabled(nodes[NODE_IDS.label_best_score], false)
 
     --the flash box must cover the whole screen
     gui.set_enabled(nodes[NODE_IDS.flash_box], false)
@@ -166,6 +169,8 @@ function on_message(self, message_id, message, sender)
             gui.set_enabled(nodes[NODE_IDS.game_over_title], true)
             gui.set_enabled(nodes[NODE_IDS.play_button], true)
             gui.set_enabled(nodes[NODE_IDS.exit_button], true)
+            gui.set_enabled(nodes[NODE_IDS.label_best_score], true)
+            gui.set_text(nodes[NODE_IDS.label_best_score], utils.load_best_score())
             read_input = true
         end)
     end
