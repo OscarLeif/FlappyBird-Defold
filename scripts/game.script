@@ -78,6 +78,8 @@ function init(self)
 		print("Error: Camera component not found!")
 	end
 	InitGrounds()
+	--we move the bird a little to right to avoid "no visible grounds"
+	go.set_position(vmath.vector3(160*2, 239,0), player_go)
 end
 
 local function camera_follow()
@@ -142,6 +144,8 @@ function on_input(self, action_id, action)
 	end
 end
 
+local spawnPosX
+
 local function spawn_pipe()
 	print("spawn_pipe method called")
 	local player_pos = go.get_world_position(player_go)
@@ -149,6 +153,7 @@ local function spawn_pipe()
 	--print ("top right " .. world_points.top_right .. "bottom right " .. world_points.bottom_right)
 	local spawn_pos = (world_points.top_right + world_points.bottom_right) / 2
 	spawn_pos.x = spawn_pos.x + 52 -- + the pipe width
+	spawn_pos.y = math.random(220, 400) -- min:220 max: 400
 	spawn_pos.z = -1
 	--local spawn_pos = vmath.vector3(next_spawn_x, player_pos.y, 0)
 	local pipe = collectionfactory.create(pipe_factory, spawn_pos)
@@ -284,7 +289,7 @@ function update(self, dt)
 
 	if state == STATES.ready then
 		--print("The game is waiting..")
-		next_spawn_x = go.get_world_position().x + PIPE_SPAWN_INTERVAL
+		next_spawn_x = go.get_world_position(player_go).x + PIPE_SPAWN_INTERVAL
 	elseif state == STATES.playing then
 		local player_pos = go.get_world_position(player_go)
 		if player_pos.x >= next_spawn_x then
