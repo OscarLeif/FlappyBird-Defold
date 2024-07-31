@@ -83,6 +83,9 @@ function on_message(self, message_id, message, sender)
 		if (message_id == hashes.PHYSICS_MESSAGE_COLLISION and message.group ~= hashes.SCORE) then
 			-- print("The bird have a collision")
 			player_state = BIRD_STATE.dead
+			print("pause animation here")
+			-- msg.post("#sprite", "set_playback_rate", {playback_rate = 0})
+			go.set("#sprite", "playback_rate",0)
 			--really need to organize the url names and ids
 			msg.post("go", hashes.MESSAGE_GAME_OVER)
 			if (message.group == hashes.DIRT) then
