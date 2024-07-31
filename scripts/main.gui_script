@@ -50,7 +50,9 @@ end
 function on_message(self, message_id, message, sender)
     if message_id == hash("fade_in") then
         fade_in(self, vmath.vector4(0, 0, 0, 0), vmath.vector4(0, 0, 0, 1), fade_time, function()
-            msg.post(sender, "fade_in_complete")
+            timer.delay(0.2, false, function()
+                msg.post(sender, "fade_in_complete")
+            end)
         end)
     elseif message_id == hash("fade_out") then
         fade_out(self, vmath.vector4(0, 0, 0, 1), vmath.vector4(0, 0, 0, 0), fade_time, function()

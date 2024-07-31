@@ -161,17 +161,34 @@ layouts {
       y: 116.0
     }
     type: TYPE_BOX
+    texture: "assets/return_btn"
     id: "exitBtn"
     overridden_fields: 1
     overridden_fields: 4
+    overridden_fields: 9
   }
   nodes {
     position {
       x: 651.0
-      y: 616.0
+      y: 603.0
+    }
+    scale {
+      x: 0.8
+      y: 0.8
+      z: 0.8
     }
     type: TYPE_TEXT
     id: "label_score"
+    overridden_fields: 1
+    overridden_fields: 3
+  }
+  nodes {
+    position {
+      x: 659.0
+      y: 256.0
+    }
+    type: TYPE_BOX
+    id: "flash_box"
     overridden_fields: 1
   }
   nodes {

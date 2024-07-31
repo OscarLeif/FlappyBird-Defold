@@ -25,6 +25,9 @@ images {
 images {
   image: "/Images/leaderboard_btn.png"
 }
+images {
+  image: "/Images/return_btn.png"
+}
 animations {
   id: "blue-bird"
   images {

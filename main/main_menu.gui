@@ -50,7 +50,7 @@ nodes {
     y: 58.0
   }
   type: TYPE_BOX
-  texture: "assets/leaderboard_btn"
+  texture: "assets/return_btn"
   id: "exitBtn"
   xanchor: XANCHOR_LEFT
   yanchor: YANCHOR_TOP
@@ -68,6 +68,7 @@ nodes {
   font: "always_on_top"
   id: "text"
   inherit_alpha: true
+  enabled: false
 }
 nodes {
   position {
@@ -83,6 +84,7 @@ nodes {
   font: "always_on_top"
   id: "text1"
   inherit_alpha: true
+  enabled: false
 }
 nodes {
   position {
@@ -98,6 +100,7 @@ nodes {
   font: "always_on_top"
   id: "text2"
   inherit_alpha: true
+  enabled: false
 }
 layers {
   name: "background"
