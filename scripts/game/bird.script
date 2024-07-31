@@ -1,10 +1,10 @@
 local BIRD_STATE = { idle = 0, alive = 1, dead = 2 }
-local ACCELERATION = vmath.vector3(0, -500, 0)
+local ACCELERATION = vmath.vector3(0, -620, 0)
 local IDLE_SPEED = 110 --80 is a test speed
 local OSCILLATION_AMPLITUDE = 0.5
 local OSCILLATION_FREQUENCY = 4
 local ROTATION_EASING = vmath.vector({ 0, })
-local MAX_FALL_SPEED = -400
+local MAX_FALL_SPEED = -450
 local FLAPP_SPEED = 280
 
 local player_state = BIRD_STATE.idle
